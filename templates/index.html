@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVAI Bot | Sri Venkateswara Arts College</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="close-sidebar" id="closeSidebar">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+            <div class="brand">
+                <img src="{{ url_for('static', filename='images/college-logo.png') }}" alt="SVAC Logo" class="logo">
+                <div class="brand-text">
+                    <h1>SVAC</h1>
+                    <p>Tirupati</p>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="https://svac.edu.in" target="_blank" class="nav-item"><i class="fa-solid fa-globe"></i> Official Site</a>
+                <a href="javascript:void(0)" class="nav-item" id="coursesTab"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+                <a href="javascript:void(0)" class="nav-item" id="timetableTab"><i class="fa-solid fa-calendar-days"></i> Time Tables</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="ttd-badge">
+                    <p>Managed by TTD</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="menu-toggle" id="menuToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                <div class="header-info">
+                    <h2>Sri Venkateswara Arts College</h2>
+                    <p>Knowledge is Power</p>
+                </div>
+                <div class="user-profile">
+                    <span class="status-online">Online</span>
+                    <img src="{{ url_for('static', filename='images/bot-dp.png') }}" alt="User DP" class="profile-dp">
+                </div>
+            </header>
+
+            <section class="banner-section">
+                <div class="banner-overlay">
+                    <div class="banner-text">
+                        <h3>Welcome to SVAI Bot Assistant</h3>
+                        <p>Ask anything about courses or campus life.</p>
+                    </div>
+                </div>
+                <img src="{{ url_for('static', filename='images/campus-1.jpg') }}" alt="SVAC Campus" class="banner-img">
+            </section>
+
+            <!-- Chat Interface -->
+            <div class="chat-wrapper">
+                <div class="chat-container" id="chatContainer">
+                    <div class="message bot-message">
+                        <div class="message-content">
+                            <p>Namaste! 🙏 I'm <strong>SVAI Bot</strong>. How can I assist you today?</p>
+                            <span class="time">Just now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-container">
+                        <input type="text" id="userInput" placeholder="Type your question here..." autocomplete="off">
+                        <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Courses Modal -->
+    <div id="coursesModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <img src="{{ url_for('static', filename='images/courses-banner.jpg') }}" alt="Courses" class="modal-banner">
+                <h3>Programmes Offered</h3>
+            </div>
+            <div class="courses-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Programme Name</th>
+                            <th>Seats</th>
+                            <th>Fee (Rs.)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coursesTableBody">
+                        <!-- Courses will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Time Table Modal -->
+    <div id="timetableModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeTimetable">&times;</span>
+            <div class="modal-header" style="height: 120px; background: var(--primary);">
+                <h3>Academic Time Tables</h3>
+            </div>
+            <div class="modal-body-scroll">
+                <div class="semester-grid">
+                    <!-- Semester Cards -->
+                    <div class="semester-card" onclick="loadSchedule(1)"><i class="fa-solid fa-book-open"></i><span>Semester 1</span></div>
+                    <div class="semester-card" onclick="loadSchedule(2)"><i class="fa-solid fa-book-open"></i><span>Semester 2</span></div>
+                    <div class="semester-card" onclick="loadSchedule(3)"><i class="fa-solid fa-book-open"></i><span>Semester 3</span></div>
+                    <div class="semester-card" onclick="loadSchedule(4)"><i class="fa-solid fa-book-open"></i><span>Semester 4</span></div>
+                    <div class="semester-card" onclick="loadSchedule(5)"><i class="fa-solid fa-book-open"></i><span>Semester 5</span></div>
+                    <div class="semester-card" onclick="loadSchedule(6)"><i class="fa-solid fa-book-open"></i><span>Semester 6</span></div>
+                    <div class="semester-card" onclick="loadSchedule(7)"><i class="fa-solid fa-book-open"></i><span>Semester 7</span></div>
+                    <div class="semester-card" onclick="loadSchedule(8)"><i class="fa-solid fa-book-open"></i><span>Semester 8</span></div>
+                </div>
+
+                <!-- Single Shared Display Area -->
+                <div id="scheduleDisplay" class="schedule-display-area" style="min-height: 250px; padding: 20px; border-top: 2px solid #eee;">
+                    <div style="text-align:center; padding: 60px 20px; color: #bdc3c7;">
+                        <i class="fa-solid fa-arrow-up" style="font-size: 2.5rem; margin-bottom: 15px; display: block; opacity: 0.5;"></i>
+                        <p style="font-size: 1.1rem; font-weight: 500;">Select a Semester to see Download Link</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="back-btn" id="backFromTimetable"><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
