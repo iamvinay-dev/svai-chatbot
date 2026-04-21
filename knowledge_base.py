@@ -5,46 +5,55 @@ def get_context():
     # Path to the JSON file
     json_path = os.path.join(os.path.dirname(__file__), 'college_data.json')
     
-    # Base context (always included)
-    base_context = """
-    SVAI BOT - COMPLETE DIGITAL HANDBOOK: S.V. ARTS COLLEGE (AUTONOMOUS)
+    # Base summary context
+    context = """
+    SVAI BOT - COMPACT KNOWLEDGE BASE: S.V. ARTS COLLEGE (AUTONOMOUS)
     
-    COLLEGE CONTACTS:
-    - Office: 0877-2264602 | JEO: 2264392 | DEO: 2264522
-    - Principal: Prof. N. Venugopal Reddy (1st Feb 2024 - Present)
-    - Superintendent: Smt. S. Lalitha (9490370445)
-
-    COLLEGE TIMINGS: 09:30 AM to 04:15 PM
-    RULES OF DISCIPLINE:
-    - Uniform: Mandatory Sky Blue Shirt & Navy Blue Pant (Boys), Blue Salwar Kameez (Girls).
-    - Ragging: Strictly prohibited and punishable.
-    - Attendance: 75% minimum required.
+    COLLEGE INFO:
+    - Managed by: TTD (Tirumala Tirupati Devasthanams)
+    - Principal: Prof. N. Venugopal Reddy (9000489182)
+    - Accreditation: NAAC A+ Grade (3.28 CGPA)
+    - Location: Tirupati, Andhra Pradesh.
+    - Timings: 09:30 AM to 04:15 PM
     """
 
-    # Check if JSON file exists and load it
     if os.path.exists(json_path):
         try:
             with open(json_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                # Convert the entire JSON to a string context
-                # (You can customize this to only include relevant parts)
-                json_context = json.dumps(data, indent=2)
-                return f"{base_context}\n\n--- ADDITIONAL COLLEGE DATA ---\n{json_context}"
+            
+            # 1. Extract Management
+            mgt = data.get('management', {}).get('officials', [])
+            context += "\nMANAGEMENT:\n" + "\n".join([f"- {o['name']} ({o['designation']})" for o in mgt[:5]])
+
+            # 2. Extract Academic Schedule Key Dates
+            sch = data.get('academic_schedule_2025_2026', {}).get('odd_semesters_I_III_V', {})
+            if sch:
+                context += f"\n\nODD SEMESTER: Classes from {sch.get('commencement_of_classes')}, Exams from {sch.get('sem_end_exams_theory')}."
+
+            # 3. Extract Scholarships (Shortened)
+            scholarships = data.get('scholarships', {}).get('list', [])
+            context += "\n\nSCHOLARSHIPS:\n" + ", ".join([s['name'] for s in scholarships[:8]])
+
+            # 4. Extract Departments & HODs
+            context += "\n\nDEPARTMENTS & HODs:\n"
+            depts = data.get('faculty_members', {}).get('departments', {})
+            for dept_name, members in depts.items():
+                hod = "N/A"
+                if isinstance(members, list) and len(members) > 0:
+                    hod = members[0].get('name', 'N/A')
+                elif isinstance(members, dict):
+                    # Handle nested structure like Physics/Chemistry
+                    faculty = members.get('faculty', [])
+                    if faculty: hod = faculty[0].get('name', 'N/A')
+                context += f"- {dept_name}: {hod}\n"
+
+            # 5. Extract Rules Summary
+            context += "\nRULES: 75% attendance req. Condonation fee Rs. 500. Ragging is a crime. Uniform: Blue/Navy."
+            
+            return context
         except Exception as e:
             print(f"Error reading JSON: {e}")
-            return base_context
-    else:
-        # Fallback to the original hardcoded directory if JSON doesn't exist yet
-        return base_context + """
-        VISION & MISSION:
-        - Vision: To transform mediocre students into socially responsible citizens through education, ethics, and spirituality.
-        - Mission: To build competent, committed professionals and inculcate spiritual/moral values.
-
-        FEES (Approx.): 
-        - BA Honours (Rs. 5400), B.Com Gen (Rs. 5400), B.Com CA (Rs. 10845), B.Sc (Rs. 5600 - Rs. 11045).
-
-        COMPUTER SCIENCE DEPARTMENT:
-        - Head: Prof. K. Kameswara Rao (9550559568)
-        - Faculty: Sri Chakravarthy (9505123979), Dr. Jyotsna (9704835308), Sri V. Kamalanadhan (9701602609), Sri D. Suresh Babu (9666748464).
-        - Latest Courses: B.Sc Honours (Data Science, AI, Computer Science), BCA Honours, and Quantum Technologies.
-        """
+            return context
+    
+    return context
