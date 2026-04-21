@@ -156,5 +156,9 @@ def robots():
 def sitemap():
     return send_from_directory(os.getcwd(), 'sitemap.xml')
 
+@app.route('/college_data.pdf')
+def download_handbook():
+    return send_from_directory(os.getcwd(), 'college_data.pdf')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

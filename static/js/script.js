@@ -195,9 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`/static/timetable/sem${semNum}.html`);
             if (response.ok) {
                 const html = await response.text();
-                // Remove weird diamond characters gracefully
-                const cleanHtml = html.replace(/[^\x20-\x7E\s\u00A0-\u00FF]/g, "");
-                displayArea.innerHTML = cleanHtml;
+                // Inject the HTML directly without aggressive filtering
+                displayArea.innerHTML = html;
             } else {
                 displayArea.innerHTML = `
                     <div style="text-align:center; padding: 30px; color: #7f8c8d; background: #f8f9fa; border-radius: 12px; margin: 10px;">
