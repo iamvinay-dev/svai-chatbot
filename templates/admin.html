@@ -3,69 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | SVAI Bot</title>
+    <title>Admin Dashboard | SVAI Bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #34495e;
-            --accent: #e67e22;
-            --text-light: #f5f6fa;
-            --danger: #e74c3c;
-            --success: #2ecc71;
-            --glass: rgba(255, 255, 255, 0.1);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Outfit', sans-serif;
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --primary: #1a237e;
+            --primary-light: #534bae;
+            --secondary: #2c3e50;
+            --accent: #ffd700;
+            --danger: #ff4d4d;
+            --success: #00c853;
+            --info: #00b0ff;
         }
 
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            min-height: 100vh;
+            background-color: var(--bg-dark);
+            color: #e0e0e0;
             display: flex;
-            justify-content: center;
             align-items: center;
-            color: var(--text-light);
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
         }
 
         .admin-container {
-            width: 90%;
+            width: 100%;
             max-width: 1000px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 1px solid var(--glass);
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
             padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin: 20px;
+            border: 1px solid #333;
         }
 
-        .login-screen {
+        #login-section {
             text-align: center;
             max-width: 400px;
-            margin: 0 auto;
+            margin: auto;
         }
 
-        .login-screen h1 {
-            font-size: 2.5rem;
+        .login-logo {
+            width: 80px;
             margin-bottom: 20px;
-            background: linear-gradient(to right, #fff, #fdbb2d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
+        h2 { color: white; margin-bottom: 10px; }
+        
         .input-group {
             margin-bottom: 20px;
             text-align: left;
@@ -76,51 +64,40 @@
             margin-bottom: 8px;
             font-weight: 600;
             font-size: 0.9rem;
-            color: #ddd;
+            color: #bbb;
         }
 
-        .input-group input, .input-group textarea {
+        input[type="password"], textarea, select {
             width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass);
-            border-radius: 12px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #111;
             color: white;
+            font-size: 1rem;
             outline: none;
-            transition: 0.3s;
+            transition: border-color 0.3s;
         }
 
-        .input-group input:focus {
-            border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.1);
-        }
+        input:focus, textarea:focus { border-color: var(--primary-light); }
 
         .btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
+            border-radius: 10px;
             border: none;
-            border-radius: 12px;
+            background: var(--secondary);
+            color: white;
             font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
             transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); opacity: 0.9; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
-        }
-
-        /* Dashboard Styles */
-        .dashboard {
-            display: none;
-        }
+        .dashboard { display: none; }
 
         .dash-header {
             display: flex;
@@ -128,85 +105,69 @@
             align-items: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid var(--glass);
+            border-bottom: 1px solid #333;
         }
 
         .tabs {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 30px;
+            overflow-x: auto;
         }
 
         .tab {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            background: #222;
+            border-radius: 8px;
             cursor: pointer;
+            white-space: nowrap;
             transition: 0.3s;
             font-weight: 600;
         }
 
-        .tab.active {
-            background: var(--accent);
-            color: white;
-        }
+        .tab:hover { background: #333; }
+        .tab.active { background: var(--primary); color: white; }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
         #json-editor {
-            width: 100%;
             height: 400px;
-            background: #1e1e1e;
-            color: #d4d4d4;
             font-family: 'Courier New', Courier, monospace;
-            padding: 20px;
-            border-radius: 12px;
-            resize: vertical;
+            font-size: 0.9rem;
             line-height: 1.5;
-        }
-
-        .file-upload {
-            border: 2px dashed var(--glass);
-            padding: 40px;
-            text-align: center;
-            border-radius: 16px;
-            margin-top: 20px;
+            color: #00ff41; /* Neo text */
         }
 
         .status-msg {
-            margin-top: 15px;
             padding: 10px;
             border-radius: 8px;
+            margin-top: 15px;
             display: none;
+            font-weight: 600;
+            text-align: center;
         }
+
+        .success { background: rgba(0, 200, 83, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .error { background: rgba(255, 77, 77, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+        .info { background: rgba(0, 176, 255, 0.2); color: var(--info); border: 1px solid var(--info); }
     </style>
 </head>
 <body>
     <div class="admin-container">
-        <!-- Login Screen -->
-        <div id="login-screen" class="login-screen">
-            <h1><i class="fa-solid fa-shield-halved"></i> Admin Login</h1>
+        <!-- Login Form -->
+        <div id="login-section">
+            <img src="{{ url_for('static', filename='images/college-logo.png') }}" alt="Logo" class="login-logo">
+            <h2>SVAI Admin Panel</h2>
+            <p style="margin-bottom: 30px; color: #888;">Enter password to manage cloud data</p>
             <div class="input-group">
-                <label>Admin Password</label>
-                <input type="password" id="admin-pass" placeholder="Enter password...">
+                <input type="password" id="admin-pass" placeholder="Enter Password">
             </div>
             <button class="btn btn-primary" onclick="login()">Access Dashboard</button>
-            <p id="login-error" style="color: var(--danger); margin-top: 15px; display: none;">Invalid credentials!</p>
+            <p id="login-error" style="color: var(--danger); margin-top: 15px; display: none;">Invalid Password</p>
         </div>
 
-        <!-- Dashboard Screen -->
+        <!-- Dashboard -->
         <div id="dashboard" class="dashboard">
             <div class="dash-header">
                 <div>
@@ -221,6 +182,7 @@
                 <div class="tab" onclick="switchTab('timetable')">Time Tables</div>
                 <div class="tab" onclick="switchTab('whatsapp')">WhatsApp Groups</div>
                 <div class="tab" onclick="switchTab('mentors-admin')">Mentors</div>
+                <div class="tab" onclick="switchTab('committees-admin')">Committees</div>
             </div>
 
             <!-- Knowledge Tab -->
@@ -229,67 +191,54 @@
                 <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Updating this will instantly reflect in the chatbot's answers.</p>
                 <textarea id="json-editor"></textarea>
                 <button class="btn btn-primary" style="margin-top: 20px;" onclick="saveJSON()">Save Institutional Data</button>
-                <div id="save-status" class="status-msg"></div>
+                <div id="json-status" class="status-msg"></div>
             </div>
 
             <!-- Timetable Tab -->
             <div id="timetable" class="tab-content">
-                <h3>Upload Semester Schedule (.html, .doc, .docx)</h3>
-                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Files will be committed to GitHub permanently.</p>
-                <div class="file-upload">
-                    <div class="input-group">
-                        <label>Select Semester (1-6)</label>
-                        <select id="sem-num" style="width: 100%; padding: 10px; border-radius: 8px; background: #333; color: white;">
-                            <option value="1">Semester 1</option>
-                            <option value="2">Semester 2</option>
-                            <option value="3">Semester 3</option>
-                            <option value="4">Semester 4</option>
-                            <option value="5">Semester 5</option>
-                            <option value="6">Semester 6</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Schedule Type</label>
-                        <select id="schedule-type" style="width: 100%; padding: 10px; border-radius: 8px; background: #333; color: white;">
-                            <option value="academic">Academic Class Schedule</option>
-                            <option value="mid1">Mid-1 Exam Schedule</option>
-                            <option value="mid2">Mid-2 Exam Schedule</option>
-                            <option value="final">Semester-End Exam Schedule</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Schedule File (.html, .doc, .docx)</label>
-                        <input type="file" id="timetable-file" accept=".html,.doc,.docx">
-                    </div>
-                    <button class="btn btn-primary" onclick="uploadFile()">Upload Permanent Change</button>
-                </div>
-                <div id="upload-status" class="status-msg"></div>
-            </div>
-
-            <!-- 🟢 WhatsApp Tab -->
-            <div id="whatsapp" class="tab-content">
-                <h3>Manage WhatsApp Groups</h3>
-                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Links will be saved to the permanent Knowledge Base.</p>
+                <h3>Departmental Time Tables</h3>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Upload generated HTML timetable files for students to view.</p>
                 
-                <div class="file-upload">
-                    <div class="input-group">
-                        <label>Group Name (e.g. B.Sc 1st Year)</label>
-                        <input type="text" id="wa-name" placeholder="Enter group name..." style="padding:10px; border-radius:8px; width:100%; background:#222; color:white; border:1px solid #444;">
-                    </div>
-                    <div class="input-group">
-                        <label>WhatsApp Link</label>
-                        <input type="text" id="wa-link" placeholder="https://chat.whatsapp.com/..." style="padding:10px; border-radius:8px; width:100%; background:#222; color:white; border:1px solid #444;">
-                    </div>
-                    <button class="btn btn-primary" onclick="addWhatsAppGroup()">Add Group Link</button>
+                <div class="input-group">
+                    <label>Select Department/Year</label>
+                    <select id="tt-name">
+                        <option value="bsc_maths_1">B.Sc Maths - I Year</option>
+                        <option value="bsc_maths_2">B.Sc Maths - II Year</option>
+                        <option value="bsc_maths_3">B.Sc Maths - III Year</option>
+                        <option value="bcom_1">B.Com - I Year</option>
+                        <option value="bcom_2">B.Com - II Year</option>
+                        <option value="ba_1">B.A - I Year</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>HTML File Content (Paste HTML)</label>
+                    <textarea id="tt-html" style="height: 200px;" placeholder="Paste the HTML code of the timetable here..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="uploadTimetable()">Upload Timetable</button>
+                <div id="tt-status" class="status-msg"></div>
+            </div>
+
+            <!-- WhatsApp Tab -->
+            <div id="whatsapp" class="tab-content">
+                <h3>Official College Communication Groups</h3>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Add or remove official student groups.</p>
+                
+                <div id="whatsapp-list" style="background: #222; padding: 15px; border-radius: 12px;">
+                    <!-- Loaded dynamically -->
                 </div>
 
-                <div style="margin-top: 30px;">
-                    <h4>Existing Groups</h4>
-                    <div id="wa-list" style="display: grid; gap: 10px; margin-top: 15px;">
-                        <!-- Groups listed here -->
+                <div style="margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
+                    <h4>Add New Group</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; margin-top: 15px;">
+                        <input type="text" id="group-name" placeholder="Group Name (e.g. B.Sc Maths Sem 2)">
+                        <input type="text" id="group-link" placeholder="Invite Link (https://...)">
                     </div>
+                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="addGroup()">Add to List</button>
+                    <button class="btn" style="margin-top: 15px; background: var(--secondary);" onclick="saveWhatsAppToCloud()">Save Changes to Cloud</button>
+                    <div id="wa-status" class="status-msg"></div>
                 </div>
             </div>
+
             <!-- Mentors Tab -->
             <div id="mentors-admin" class="tab-content">
                 <h3>Manage Faculty Mentors</h3>
@@ -310,44 +259,73 @@
 
                 <div style="margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
                     <h4>Add New Mentor</h4>
-                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr; gap: 10px; margin-top: 15px;">
-                        <input type="text" id="m-sl" placeholder="Sl.No" style="padding:10px; border-radius:8px; background:#333; border:none; color:white;">
-                        <input type="text" id="m-group" placeholder="Group / Course" style="padding:10px; border-radius:8px; background:#333; border:none; color:white;">
-                        <input type="text" id="m-name" placeholder="Lecturer Name" style="padding:10px; border-radius:8px; background:#333; border:none; color:white;">
-                        <input type="text" id="m-mobile" placeholder="Mobile" style="padding:10px; border-radius:8px; background:#333; border:none; color:white;">
+                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr; gap: 10px; margin-top: 15px;">
+                        <input type="text" id="m-sl" placeholder="Sl.No" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                        <input type="text" id="m-group" placeholder="Group / Course" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                        <input type="text" id="m-name" placeholder="Lecturer Name" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
                     </div>
                     <button class="btn btn-primary" style="margin-top: 15px;" onclick="addMentor()">Add to List</button>
                     <button class="btn" style="margin-top: 15px; background: var(--secondary);" onclick="saveMentors()">Save Year Changes to Cloud</button>
                     <div id="m-status" class="status-msg"></div>
                 </div>
             </div>
+
+            <!-- Committees Tab -->
+            <div id="committees-admin" class="tab-content">
+                <h3>Manage Institutional Committees</h3>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Updating these lists will instantly reflect in the chatbot and main site.</p>
+                
+                <div class="input-group">
+                    <label>Select Committee</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="committee-select" onchange="loadCommitteesAdmin()" style="flex: 1; padding: 10px; border-radius: 8px; background: #333; color: white;">
+                            <option value="Planning & Evaluation">Planning & Evaluation</option>
+                            <option value="Academic Cell">Academic Cell</option>
+                            <option value="Alumni Association">Alumni Association</option>
+                            <option value="Anti-Ragging">Anti-Ragging</option>
+                            <option value="Anti-Drug">Anti-Drug</option>
+                            <option value="Attendance Committee">Attendance Committee</option>
+                            <option value="Calendar & Hand Book">Calendar & Hand Book</option>
+                            <option value="Career Guidance">Career Guidance</option>
+                        </select>
+                        <button onclick="addCommitteeCategory()" class="btn btn-primary" style="width: auto; padding: 0 15px;">New Category</button>
+                    </div>
+                </div>
+
+                <div id="committees-admin-list" style="margin-top: 20px; background: #222; padding: 15px; border-radius: 12px; max-height: 400px; overflow-y: auto;">
+                    <!-- Members listed here -->
+                </div>
+
+                <div style="margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
+                    <h4>Add New Member</h4>
+                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr 150px; gap: 10px; margin-top: 15px;">
+                        <input type="text" id="c-sl" placeholder="Sl.No" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                        <input type="text" id="c-name" placeholder="Member Name" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                        <input type="text" id="c-desig" placeholder="Designation & Dept" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                        <input type="text" id="c-role" placeholder="Role (Member/Co-ord)" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                        <input type="text" id="c-contact" placeholder="Contact No" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="addCommitteeMember()">Add Member</button>
+                    <button class="btn" style="margin-top: 15px; background: var(--secondary);" onclick="saveCommittees()">Save All Committees</button>
+                    <div id="c-status" class="status-msg"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        let authenticated = false;
-
-        async function login() {
+        function login() {
             const pass = document.getElementById('admin-pass').value;
-            const res = await fetch('/admin/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({password: pass})
-            });
-
-            if (res.ok) {
-                document.getElementById('login-screen').style.display = 'none';
+            if (pass === 'svacadmin2025') {
+                document.getElementById('login-section').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
-                authenticated = true;
-                loadJSON();
+                loadInitialData();
             } else {
                 document.getElementById('login-error').style.display = 'block';
             }
         }
 
-        function logout() {
-            window.location.reload();
-        }
+        function logout() { location.reload(); }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -355,151 +333,117 @@
             
             event.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'whatsapp') loadWhatsAppAdmin();
+            if (tabId === 'mentors-admin') loadMentorsAdmin();
+            if (tabId === 'committees-admin') loadCommitteesAdmin();
         }
 
-        let globalAppData = null;
-
-        async function loadJSON() {
+        async function loadInitialData() {
             const res = await fetch('/admin/get_json');
-            globalAppData = await res.json();
-            document.getElementById('json-editor').value = JSON.stringify(globalAppData, null, 2);
-            renderWhatsAppGroups();
-        }
-
-        function renderWhatsAppGroups() {
-            const list = document.getElementById('wa-list');
-            list.innerHTML = '';
-            if (!globalAppData.whatsapp_groups) globalAppData.whatsapp_groups = [];
-            
-            globalAppData.whatsapp_groups.forEach((group, index) => {
-                const div = document.createElement('div');
-                div.style = "display: flex; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; align-items: center;";
-                div.innerHTML = `
-                    <div>
-                        <strong style="color: #25D366;">${group.name}</strong><br>
-                        <small style="color: #888;">${group.link}</small>
-                    </div>
-                    <button class="btn btn-danger" style="padding: 5px 10px;" onclick="removeWhatsAppGroup(${index})">Remove</button>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        async function addWhatsAppGroup() {
-            const name = document.getElementById('wa-name').value.trim();
-            const link = document.getElementById('wa-link').value.trim();
-            
-            if (!name || !link) return alert("Please enter both name and link!");
-            
-            if (!globalAppData.whatsapp_groups) globalAppData.whatsapp_groups = [];
-            globalAppData.whatsapp_groups.push({ name, link });
-            
-            // Save updated JSON
-            document.getElementById('json-editor').value = JSON.stringify(globalAppData, null, 2);
-            await saveJSON();
-            
-            // UI Update
-            document.getElementById('wa-name').value = '';
-            document.getElementById('wa-link').value = '';
-            renderWhatsAppGroups();
-        }
-
-        async function removeWhatsAppGroup(index) {
-            if (!confirm("Are you sure you want to remove this group?")) return;
-            globalAppData.whatsapp_groups.splice(index, 1);
-            document.getElementById('json-editor').value = JSON.stringify(globalAppData, null, 2);
-            await saveJSON();
-            renderWhatsAppGroups();
+            const data = await res.json();
+            document.getElementById('json-editor').value = JSON.stringify(data, null, 2);
         }
 
         async function saveJSON() {
-            const status = document.getElementById('save-status');
+            const status = document.getElementById('json-status');
+            const data = document.getElementById('json-editor').value;
+            status.style.display = 'block';
+            status.className = 'status-msg info';
+            status.innerText = "Processing Cloud Sync...";
+
             try {
-                const updatedData = JSON.parse(document.getElementById('json-editor').value);
-                const res = await fetch('/admin/update_json', {
+                const parsed = JSON.parse(data);
+                const res = await fetch('/admin/save_json', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(updatedData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(parsed)
                 });
 
                 if (res.ok) {
-                    status.style.display = 'block';
-                    status.style.background = 'var(--success)';
-                    status.innerText = "Data saved successfully!";
+                    status.className = 'status-msg success';
+                    status.innerText = "Cloud Data Updated Successfully!";
                 } else {
-                    throw new Error();
+                    throw new Error("Sync Failed");
                 }
             } catch (e) {
-                status.style.display = 'block';
-                status.style.background = 'var(--danger)';
-                status.innerText = "Error: Invalid JSON format or server error!";
+                status.className = 'status-msg error';
+                status.innerText = "Error: Invalid JSON or Server Down";
             }
-            setTimeout(() => status.style.display = 'none', 3000);
         }
 
-        async function uploadFile() {
-            const status = document.getElementById('upload-status');
-            const fileInput = document.getElementById('timetable-file');
-            const semNum = document.getElementById('sem-num').value;
-            const type = document.getElementById('schedule-type').value;
+        // WhatsApp Admin Logic
+        let currentWhatsApp = [];
+        async function loadWhatsAppAdmin() {
+            const res = await fetch('/admin/get_json');
+            const data = await res.json();
+            currentWhatsApp = data.whatsapp_groups || [];
+            updateWhatsAppUI();
+        }
 
-            if (!fileInput.files[0]) return;
+        function updateWhatsAppUI() {
+            const list = document.getElementById('whatsapp-list');
+            list.innerHTML = currentWhatsApp.map((g, i) => `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; background:#333; padding:10px; border-radius:8px;">
+                    <div><strong>${g.name}</strong><br><small>${g.link}</small></div>
+                    <button onclick="removeGroup(${i})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
 
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-            formData.append('sem', semNum);
-            formData.append('type', type);
-
-            const res = await fetch('/admin/upload_timetable', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (res.ok) {
-                status.style.display = 'block';
-                status.style.background = 'var(--success)';
-                status.innerText = "Upload successful! Site will redeploy in 1-2 mins.";
-            } else {
-                const err = await res.json();
-                status.style.display = 'block';
-                status.style.background = 'var(--danger)';
-                status.innerText = "Error: " + (err.error || "Upload failed!");
+        function addGroup() {
+            const name = document.getElementById('group-name').value;
+            const link = document.getElementById('group-link').value;
+            if (name && link) {
+                currentWhatsApp.push({name, link});
+                updateWhatsAppUI();
             }
-            setTimeout(() => status.style.display = 'none', 3000);
+        }
+
+        function removeGroup(i) {
+            currentWhatsApp.splice(i, 1);
+            updateWhatsAppUI();
+        }
+
+        async function saveWhatsAppToCloud() {
+            const status = document.getElementById('wa-status');
+            status.style.display = 'block';
+            const res = await fetch('/admin/get_json');
+            const data = await res.json();
+            data.whatsapp_groups = currentWhatsApp;
+            
+            const saveRes = await fetch('/admin/save_json', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            if(saveRes.ok) status.innerText = "Saved to Cloud!";
         }
 
         // Mentors Management Logic
         let mentorsData = {};
-
         async function loadMentorsAdmin() {
             const year = document.getElementById('mentor-year-select').value;
             const container = document.getElementById('mentors-list');
             container.innerHTML = '<p style="text-align:center;">Loading mentors...</p>';
-            
             try {
                 const res = await fetch('/admin/get_json');
                 const data = await res.json();
-                mentorsData = data.mentors || { "1st_year": [], "2nd_year": [], "3rd_year": [] };
-                
-                const list = mentorsData[year] || [];
-                if (list.length === 0) {
-                    container.innerHTML = '<p style="text-align:center; color:#666;">No mentors found for this year.</p>';
-                    return;
-                }
+                mentorsData = data.mentors || {};
+                loadMentorsAdminUI();
+            } catch(e) { container.innerHTML = '<p style="color:var(--danger);">Error.</p>'; }
+        }
 
-                container.innerHTML = list.map((m, index) => `
-                    <div style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
-                        <div>
-                            <strong style="color: var(--primary-light);">${m.sl}.</strong>
-                            <span style="color: #eee;">${m.group}</span> - 
-                            <span style="color: #bbb;">${m.mentor}</span>
-                        </div>
-                        <button onclick="removeMentor('${year}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `).join('');
-            } catch(e) {
-                container.innerHTML = '<p style="color:var(--danger);">Error loading data.</p>';
-            }
+        function loadMentorsAdminUI() {
+            const year = document.getElementById('mentor-year-select').value;
+            const container = document.getElementById('mentors-list');
+            const list = mentorsData[year] || [];
+            container.innerHTML = list.map((m, index) => `
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <div><strong style="color:var(--primary-light);">${m.sl}.</strong> <span style="color:#eee;">${m.group}</span> - <span style="color:#bbb;">${m.mentor}</span></div>
+                    <button onclick="removeMentor('${year}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
         }
 
         function addMentor() {
@@ -507,82 +451,88 @@
             const sl = document.getElementById('m-sl').value;
             const group = document.getElementById('m-group').value;
             const name = document.getElementById('m-name').value;
-            const mobile = document.getElementById('m-mobile').value;
-
-            if(!sl || !group || !name || !mobile) { alert('Fill all fields'); return; }
-
+            if(!sl || !group || !name) return;
             if(!mentorsData[year]) mentorsData[year] = [];
-            mentorsData[year].push({ sl, group, mentor: name, mobile });
-            
-            // Clear inputs
-            document.getElementById('m-sl').value = '';
-            document.getElementById('m-group').value = '';
-            document.getElementById('m-name').value = '';
-            document.getElementById('m-mobile').value = '';
-            
-            loadMentorsAdminUI(); // Partial update
+            mentorsData[year].push({ sl, group, mentor: name, mobile: "" });
+            loadMentorsAdminUI();
         }
 
-        function loadMentorsAdminUI() {
-            const year = document.getElementById('mentor-year-select').value;
-            const container = document.getElementById('mentors-list');
-            const list = mentorsData[year] || [];
-            
+        function removeMentor(year, index) { mentorsData[year].splice(index, 1); loadMentorsAdminUI(); }
+
+        async function saveMentors() {
+            const res = await fetch('/admin/get_json');
+            const data = await res.json();
+            data.mentors = mentorsData;
+            await fetch('/admin/save_json', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+            alert("Mentors Saved!");
+        }
+
+        // Committees Management
+        let committeesData = {};
+        async function loadCommitteesAdmin() {
+            const name = document.getElementById('committee-select').value;
+            const container = document.getElementById('committees-admin-list');
+            container.innerHTML = '<p style="text-align:center;">Loading committee members...</p>';
+            try {
+                const res = await fetch('/admin/get_json');
+                const data = await res.json();
+                committeesData = data.committees || {};
+                loadCommitteesAdminUI();
+            } catch(e) { container.innerHTML = '<p style="color:var(--danger);">Error.</p>'; }
+        }
+
+        function loadCommitteesAdminUI() {
+            const name = document.getElementById('committee-select').value;
+            const container = document.getElementById('committees-admin-list');
+            const list = committeesData[name] || [];
             container.innerHTML = list.map((m, index) => `
                 <div style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
-                    <div>
-                        <strong style="color: var(--primary-light);">${m.sl}.</strong>
-                        <span style="color: #eee;">${m.group}</span> - 
-                        <span style="color: #bbb;">${m.mentor}</span>
+                    <div style="flex:1;">
+                        <strong style="color:var(--primary-light);">${m.sl}.</strong> 
+                        <span style="color:#eee; font-weight:600;">${m.name}</span> 
+                        <span style="color:#aaa; font-size:0.8rem;">(${m.role})</span>
+                        <div style="font-size:0.75rem; color:#888;">${m.desig} | ${m.contact}</div>
                     </div>
-                    <button onclick="removeMentor('${year}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                    <button onclick="removeCommitteeMember('${name}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `).join('');
         }
 
-        function removeMentor(year, index) {
-            mentorsData[year].splice(index, 1);
-            loadMentorsAdminUI();
+        function addCommitteeMember() {
+            const name = document.getElementById('committee-select').value;
+            const sl = document.getElementById('c-sl').value;
+            const mname = document.getElementById('c-name').value;
+            const desig = document.getElementById('c-desig').value;
+            const role = document.getElementById('c-role').value;
+            const contact = document.getElementById('c-contact').value || "-";
+            if(!sl || !mname || !role) return;
+            if(!committeesData[name]) committeesData[name] = [];
+            committeesData[name].push({ sl, name: mname, desig, role, contact });
+            loadCommitteesAdminUI();
         }
 
-        async function saveMentors() {
-            const status = document.getElementById('m-status');
-            status.innerText = 'Connecting to GitHub...';
-            status.className = 'status-msg info';
+        function removeCommitteeMember(name, index) { committeesData[name].splice(index, 1); loadCommitteesAdminUI(); }
 
-            try {
-                // Fetch full JSON first
-                const res = await fetch('/admin/get_json');
-                const fullData = await res.json();
-                
-                // Update mentors part
-                fullData.mentors = mentorsData;
+        async function saveCommittees() {
+            const res = await fetch('/admin/get_json');
+            const data = await res.json();
+            data.committees = committeesData;
+            await fetch('/admin/save_json', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+            alert("Committees Saved!");
+        }
 
-                const saveRes = await fetch('/admin/save_json', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(fullData)
-                });
-
-                if (saveRes.ok) {
-                    status.innerText = 'Mentors saved successfully to GitHub!';
-                    status.className = 'status-msg success';
-                } else {
-                    throw new Error('Save failed');
-                }
-            } catch (e) {
-                status.innerText = 'Error: ' + e.message;
-                status.className = 'status-msg error';
+        function addCommitteeCategory() {
+            const cat = prompt("New Committee Name:");
+            if (cat) {
+                const select = document.getElementById('committee-select');
+                const opt = document.createElement('option');
+                opt.value = cat; opt.innerText = cat;
+                select.appendChild(opt);
+                select.value = cat;
+                committeesData[cat] = [];
+                loadCommitteesAdminUI();
             }
         }
-
-        // Initialize lists on login or tab switch
-        // Modifying switchTab to handle initialization
-        const originalSwitchTab = switchTab;
-        switchTab = function(tabId) {
-            originalSwitchTab(tabId);
-            if (tabId === 'mentors-admin') loadMentorsAdmin();
-        };
     </script>
 </body>
 </html>

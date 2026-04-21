@@ -1,4 +1,82 @@
 {
+  "committees": {
+    "Planning & Evaluation": [
+      {"sl": "01", "name": "Prof. N. Venugopal Reddy", "desig": "Principal", "role": "Co-ordinator", "contact": "9004 89182"},
+      {"sl": "02", "name": "Prof. Y. Mallikarjun Rao", "desig": "HoD of Commerce", "role": "Secretary", "contact": "98485 33623"},
+      {"sl": "03", "name": "Prof. P.V. Chalapathi", "desig": "HoD of Chemistry & GCE", "role": "Member", "contact": "98488 70033"},
+      {"sl": "04", "name": "Prof. A.V. Chandra Sekhar", "desig": "Research Coordinator", "role": "Member", "contact": "94410 10555"},
+      {"sl": "05", "name": "Prof. Y. Dasaradhudu", "desig": "Welfare Co-ord", "role": "Member", "contact": "94400 54764"},
+      {"sl": "06", "name": "Sri C. Ratna Rao", "desig": "HoD of Electronics", "role": "Member", "contact": "87908 35429"},
+      {"sl": "07", "name": "Dr. M. Vani", "desig": "HoD of Zoology", "role": "Member", "contact": "98850 02295"},
+      {"sl": "08", "name": "Dr. M. Kiran Kumar Raju", "desig": "HoD of Economics", "role": "Member", "contact": "99636 40650"},
+      {"sl": "09", "name": "Dr. B. Nageswar Naik", "desig": "Lecturer in Commerce", "role": "Member", "contact": "84998 55674"},
+      {"sl": "10", "name": "Dr. P. Lokanadha Mandadi", "desig": "Sr. Lecturer in Telugu", "role": "Member", "contact": "94410 75059"}
+    ],
+    "Academic Cell": [
+      {"sl": "01", "name": "Sri C. Ratna Rao", "desig": "HoD of Electronics", "role": "Co-ordinator", "contact": "8790835429"},
+      {"sl": "02", "name": "Prof. N. Bheemanna", "desig": "HoD of Telugu", "role": "Member", "contact": "78423 88651"},
+      {"sl": "03", "name": "Prof. K. Siva Kumar", "desig": "Prof. of Chemistry", "role": "Member", "contact": "92900 80843"},
+      {"sl": "04", "name": "Dr. M. Kiran Kumar Raju", "desig": "HoD of Economics", "role": "Member", "contact": "99636 40650"},
+      {"sl": "05", "name": "Dr. M. Prasada Rao", "desig": "Asst. Prof in Telugu", "role": "Member", "contact": "94404 67046"},
+      {"sl": "06", "name": "Dr. B. Nageswar Naik", "desig": "Lecturer in Commerce", "role": "Member", "contact": "84998 55674"}
+    ],
+    "Alumni Association": [
+      {"sl": "01", "name": "Prof. S. Azmal Basha", "desig": "President", "role": "President", "contact": "-"},
+      {"sl": "02", "name": "Sri T. Jayaramaiah", "desig": "Lec. in History", "role": "Secretary", "contact": "97030 78308"},
+      {"sl": "03", "name": "Sri V. Chandrababu", "desig": "Lec. in Economics", "role": "Treasurer", "contact": "63097 96277"},
+      {"sl": "04", "name": "Prof. K. Kameswara Rao", "desig": "Prof. of Physics", "role": "Executive Member", "contact": "95505 59568"},
+      {"sl": "05", "name": "Prof. Y. Mallikarjun Rao", "desig": "HoD of Commerce", "role": "Executive Member", "contact": "98485 33623"},
+      {"sl": "06", "name": "Dr. A. Sarangapani", "desig": "Professor in Chemistry", "role": "Executive Member", "contact": "94414 81579"},
+      {"sl": "07", "name": "Dr. S. Mustaq Ahmmad", "desig": "HoD of Phy. Education", "role": "Executive Member", "contact": "90522 16777"},
+      {"sl": "08", "name": "Dr. VHH. Surendra Babu", "desig": "C. Lec. in Physics", "role": "Executive Member", "contact": "98496 66710"},
+      {"sl": "09", "name": "D. Suresh Babu", "desig": "C. Lec. in Com. Sci.", "role": "Executive Member", "contact": "96667 48464"},
+      {"sl": "10", "of Prabhakar": "D. Prabhakar", "desig": "C. Lec. in Chemistry", "role": "Executive Member", "contact": "70979 06377"},
+      {"sl": "11", "name": "Dr. P. Giri Prakash", "desig": "C. Lec. in Physics", "role": "Executive Member", "contact": "92908 98291"},
+      {"sl": "12", "name": "B. Bhanu Prakash Reddy", "desig": "C. Lec. in Zoology", "role": "Executive Member", "contact": "99599 88499"},
+      {"sl": "13", "name": "Dr. R. Kishore Kumar", "desig": "C. Lec. in Chemistry", "role": "Executive Member", "contact": "99128 60490"}
+    ],
+    "Anti-Ragging": [
+      {"sl": "01", "name": "Prof. N. Venugopal Reddy", "desig": "Principal", "role": "Chairperson", "contact": "90004 89182"},
+      {"sl": "02", "name": "Prof. K. Kameswara Rao", "desig": "Prof. of Physics", "role": "Member", "contact": "95505 59568"},
+      {"sl": "03", "name": "Dr. S. Mustaq Ahmed", "desig": "HoD of Phy. Edu.", "role": "Member", "contact": "90522 16777"},
+      {"sl": "04", "name": "Capt. V. Ramesh", "desig": "Lecturer in Mathematics", "role": "Member", "contact": "94928 55008"},
+      {"sl": "05", "name": "Dr. V.H.S. Surendra Babu", "desig": "C. Lect. in Physics", "role": "Member", "contact": "99666 92106"}
+    ],
+    "Anti-Drug": [
+      {"sl": "01", "name": "Prof. N. Venugopal Reddy", "desig": "Principal", "role": "Chairperson", "contact": "90004 89182"},
+      {"sl": "02", "name": "Prof. K. Sivakumar", "desig": "Prof. of Chemistry", "role": "Member", "contact": "92900 80843"},
+      {"sl": "03", "name": "Prof. R. Ravi Kumar", "desig": "HoD of Dairy Science", "role": "Member", "contact": "94404 72062"},
+      {"sl": "04", "name": "Dr. J. Hima Bindu", "desig": "C. Lect. in Microbiology", "role": "Member", "contact": "98854 55977"},
+      {"sl": "05", "name": "Dr. P. Mohan", "desig": "C. Lect. in Biotech", "role": "Member", "contact": "89851 76265"},
+      {"sl": "06", "name": "Dr. P. Sandya Priya", "desig": "C. Lect. in Microbiology", "role": "Member", "contact": "94902 53504"}
+    ],
+    "Attendance Committee": [
+      {"sl": "01", "name": "Prof. G. Kishan", "desig": "HoD of History", "role": "Chairperson", "contact": "8919672096"},
+      {"sl": "02", "name": "Dr. A. Seshadri", "desig": "C. Lec. in Economics", "role": "Member", "contact": "79816 00052"},
+      {"sl": "03", "name": "Prof. S. Usha", "desig": "Prof. of Commerce", "role": "B.Com Co-ordinator", "contact": "98488 70033"},
+      {"sl": "04", "name": "Dr. B. Nageswar Naik", "desig": "Lecturer in Commerce", "role": "Member", "contact": "84998 55674"},
+      {"sl": "05", "name": "Sri T. Thriveni", "desig": "HoD of Hindi", "role": "B.Sc. (Maths) Co-ordinator", "contact": "88011 72313"},
+      {"sl": "06", "name": "Sri GAN Srinivasa Rao", "desig": "C. Lec. in Physics", "role": "Member", "contact": "99511 21655"},
+      {"sl": "07", "name": "Sri A. Surekha", "desig": "HoD of Botany", "role": "B.Sc (Non-Met) Co-ordinator", "contact": "99662 62642"},
+      {"sl": "08", "name": "Sri P.S. Poornima", "desig": "C. Lecturer in Zoology", "role": "Member", "contact": "98669 42517"}
+    ],
+    "Calendar & Hand Book": [
+      {"sl": "01", "name": "Prof. Dr. G. Kishan", "desig": "HoD of History", "role": "Editor", "contact": "891967209"},
+      {"sl": "02", "name": "Dr. S. Markadeyan", "desig": "HoD of English", "role": "Co-ordinator", "contact": "944149541"},
+      {"sl": "03", "name": "Dr. M. Prasada Rao", "desig": "Asst. Prof in Telugu", "role": "Member", "contact": "944046704"},
+      {"sl": "04", "name": "Dr. K. Muniswamy Achari", "desig": "Lec. in Telugu", "role": "Member", "contact": "949206729"},
+      {"sl": "05", "name": "Prof. B. Sreedevi", "desig": "C. Lect. in English", "role": "Member", "contact": "92913 7365"}
+    ],
+    "Career Guidance": [
+      {"sl": "01", "name": "Prof. Dr. G. Kishan", "desig": "HoD of History", "role": "Co-ordinator", "contact": "89196 7209"},
+      {"sl": "02", "name": "Prof. M. Pedda Reddeppa Reddy", "desig": "HoD of Statistics", "role": "Member", "contact": "98856 2555"},
+      {"sl": "03", "name": "Sri N. Suresh Kumar", "desig": "Lec. in Political Sci.", "role": "Member", "contact": "94416 0675"},
+      {"sl": "04", "name": "Sri V. Chennakesavulu Reddy", "desig": "C. Lec. in Com. Sci.", "role": "Member", "contact": "94947 440"},
+      {"sl": "05", "name": "Smt. K. Mahitha Delhi Rani", "desig": "C. Lect. in Electronics", "role": "Member", "contact": "97036 027"},
+      {"sl": "06", "name": "Dr. A. Seshadri", "desig": "C. Lec. in Economics", "role": "Member", "contact": "79816 00052"},
+      {"sl": "07", "name": "Smt. B. Sreedevi", "desig": "C. Lect. in English", "role": "Member", "contact": "92913 73659"}
+    ]
+  },
   "mentors": {
     "1st_year": [
       {"sl": "01", "group": "Political Science", "mentor": "Dr. K. Narsimhulu", "mobile": "9985038780"},

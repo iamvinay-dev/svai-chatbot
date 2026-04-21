@@ -170,6 +170,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const mentorsModal = document.getElementById('mentorsModal');
     const closeMentorsModal = document.getElementById('closeMentorsModal');
 
+    const committeesTab = document.getElementById('committeesTab');
+    const committeesModal = document.getElementById('committeesModal');
+    const closeCommitteesModal = document.getElementById('closeCommitteesModal');
+
+    if (committeesTab) {
+        committeesTab.addEventListener('click', () => {
+            closeMenu();
+            committeesModal.style.display = 'block';
+            loadCommittees();
+        });
+    }
+
+    if (closeCommitteesModal) {
+        closeCommitteesModal.addEventListener('click', () => committeesModal.style.display = 'none');
+    }
+
     if (mentorsTab) {
         mentorsTab.addEventListener('click', () => {
             closeMenu();
@@ -326,8 +342,66 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target == timetableModal) timetableModal.style.display = 'none';
         if (e.target == whatsappModal) whatsappModal.style.display = 'none';
         if (e.target == mentorsModal) mentorsModal.style.display = 'none';
+        if (e.target == committeesModal) committeesModal.style.display = 'none';
     });
 });
+
+let committeesDataStore = {};
+
+async function loadCommittees() {
+    const tabContainer = document.getElementById('committeesTabContainer');
+    if (!tabContainer) return;
+
+    tabContainer.innerHTML = '<p style="padding:10px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Initializing...</p>';
+
+    try {
+        const res = await fetch('/admin/get_json');
+        if (res.ok) {
+            const data = await res.json();
+            committeesDataStore = data.committees || {};
+            const names = Object.keys(committeesDataStore);
+
+            if (names.length > 0) {
+                tabContainer.innerHTML = names.map((name, i) => `
+                    <button class="year-tab ${i===0 ? 'active' : ''}" onclick="switchCommittee('${name}', this)" style="white-space:nowrap; flex:none;">
+                        ${name}
+                    </button>
+                `).join('');
+                switchCommittee(names[0]);
+            } else {
+                tabContainer.innerHTML = '<p style="padding:10px; color:#aaa;">No committees found.</p>';
+            }
+        }
+    } catch (e) {
+        tabContainer.innerHTML = '<p style="color:red; padding:10px;">Error connecting.</p>';
+    }
+}
+
+function switchCommittee(name, btn = null) {
+    if (btn) {
+        document.querySelectorAll('#committeesTabContainer .year-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    const content = document.getElementById('committeesContent');
+    const members = committeesDataStore[name] || [];
+
+    if (members.length > 0) {
+        content.innerHTML = members.map(m => `
+            <div class="mentor-card">
+                <div class="mentor-sl" style="color:var(--primary); opacity:0.3;">${m.sl}</div>
+                <div class="mentor-info">
+                    <h4 style="font-size:1rem;">${m.name}</h4>
+                    <p style="color:var(--primary); font-weight:700;">${m.role}</p>
+                    <p style="font-size:0.8rem; margin-top:2px;">${m.desig}</p>
+                    ${m.contact !== '-' ? `<p style="font-size:0.8rem; color:#4a5568; margin-top:5px;"><i class="fa-solid fa-phone" style="font-size:0.7rem;"></i> ${m.contact}</p>` : ''}
+                </div>
+            </div>
+        `).join('');
+    } else {
+        content.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:40px; color:#aaa;">No members listed.</p>';
+    }
+}
 
 let currentMentorYear = '1st_year';
 
