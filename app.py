@@ -136,8 +136,8 @@ def get_json_data():
             return jsonify(json.load(f))
     return jsonify({"error": "File not found"}), 404
 
-@app.route('/admin/update_json', methods=['POST'])
-def update_json_data():
+@app.route('/admin/save_json', methods=['POST'])
+def save_json_data():
     file_path = 'sv_arts_college_COMPLETE.json'
     try:
         new_data = request.json

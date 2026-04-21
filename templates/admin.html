@@ -151,6 +151,42 @@
         .success { background: rgba(0, 200, 83, 0.2); color: var(--success); border: 1px solid var(--success); }
         .error { background: rgba(255, 77, 77, 0.2); color: var(--danger); border: 1px solid var(--danger); }
         .info { background: rgba(0, 176, 255, 0.2); color: var(--info); border: 1px solid var(--info); }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .admin-container {
+                margin: 0;
+                border-radius: 0;
+                padding: 20px;
+                min-height: 100vh;
+            }
+            .dash-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .tabs {
+                padding-bottom: 10px;
+            }
+            .input-group div, .grid-form {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+            input, select, textarea, .btn {
+                font-size: 16px !important; /* Prevent iOS zoom */
+            }
+            .mentor-row, .committee-row {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 10px;
+            }
+            .mentor-row div:last-child, .committee-row div:last-child {
+                width: 100%;
+                justify-content: flex-end;
+                border-top: 1px solid #444;
+                padding-top: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -196,25 +232,39 @@
 
             <!-- Timetable Tab -->
             <div id="timetable" class="tab-content">
-                <h3>Departmental Time Tables</h3>
-                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Upload generated HTML timetable files for students to view.</p>
+                <h3>Upload Academic Time Tables</h3>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Upload PDF, DOC, or HTML files for specific semesters and exam types.</p>
                 
-                <div class="input-group">
-                    <label>Select Department/Year</label>
-                    <select id="tt-name">
-                        <option value="bsc_maths_1">B.Sc Maths - I Year</option>
-                        <option value="bsc_maths_2">B.Sc Maths - II Year</option>
-                        <option value="bsc_maths_3">B.Sc Maths - III Year</option>
-                        <option value="bcom_1">B.Com - I Year</option>
-                        <option value="bcom_2">B.Com - II Year</option>
-                        <option value="ba_1">B.A - I Year</option>
-                    </select>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" class="grid-form">
+                    <div class="input-group">
+                        <label>Target Semester</label>
+                        <select id="tt-sem">
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Schedule Type</label>
+                        <select id="tt-type">
+                            <option value="academic">Regular Academic</option>
+                            <option value="mid1">Mid-1 Exams</option>
+                            <option value="mid2">Mid-2 Exams</option>
+                            <option value="final">Semester End Exams</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div class="input-group">
-                    <label>HTML File Content (Paste HTML)</label>
-                    <textarea id="tt-html" style="height: 200px;" placeholder="Paste the HTML code of the timetable here..."></textarea>
+                    <label>Upload File (PDF, DOCX, or HTML)</label>
+                    <input type="file" id="tt-file" accept=".pdf,.doc,.docx,.html" style="padding: 10px; background: #222; border: 1px dashed #555; cursor: pointer;">
+                    <p style="font-size: 0.75rem; color: #888; margin-top: 5px;">Note: If you upload an HTML file, it will be displayed directly. PDF/DOC files will be available for download.</p>
                 </div>
-                <button class="btn btn-primary" onclick="uploadTimetable()">Upload Timetable</button>
+
+                <button class="btn btn-primary" onclick="uploadTimetable()"><i class="fa-solid fa-cloud-arrow-up"></i> Upload to Cloud</button>
                 <div id="tt-status" class="status-msg"></div>
             </div>
 
@@ -229,7 +279,7 @@
 
                 <div style="margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
                     <h4>Add New Group</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; margin-top: 15px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; margin-top: 15px;" class="grid-form">
                         <input type="text" id="group-name" placeholder="Group Name (e.g. B.Sc Maths Sem 2)">
                         <input type="text" id="group-link" placeholder="Invite Link (https://...)">
                     </div>
@@ -262,7 +312,7 @@
 
                 <div style="margin-top: 30px; border-top: 1px solid #444; padding: 20px; background: rgba(26, 35, 126, 0.05); border-radius: 12px;">
                     <h4 id="mentor-form-title">Add New Mentor</h4>
-                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr; gap: 10px; margin-top: 15px;">
+                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr; gap: 10px; margin-top: 15px;" class="grid-form">
                         <input type="text" id="m-sl" placeholder="Sl.No">
                         <input type="text" id="m-group" placeholder="Course / Group">
                         <input type="text" id="m-name" placeholder="Lecturer Name">
@@ -301,7 +351,7 @@
 
                 <div style="margin-top: 30px; border-top: 1px solid #444; padding: 20px; background: rgba(0, 176, 255, 0.05); border-radius: 12px;">
                     <h4 id="committee-form-title">Add New Member</h4>
-                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr 150px; gap: 10px; margin-top: 15px;">
+                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr 150px; gap: 10px; margin-top: 15px;" class="grid-form">
                         <input type="text" id="c-sl" placeholder="Sl.No">
                         <input type="text" id="c-name" placeholder="Member Name">
                         <input type="text" id="c-role" placeholder="Role (e.g. Member)">
@@ -713,6 +763,47 @@
                 select.value = cat;
                 committeesData[cat] = [];
                 loadCommitteesAdminUI();
+            }
+        }
+
+        async function uploadTimetable() {
+            const status = document.getElementById('tt-status');
+            const fileInput = document.getElementById('tt-file');
+            const sem = document.getElementById('tt-sem').value;
+            const type = document.getElementById('tt-type').value;
+
+            if (!fileInput.files[0]) {
+                alert("Please select a file to upload");
+                return;
+            }
+
+            status.style.display = 'block';
+            status.className = 'status-msg info';
+            status.innerText = "Uploading to Cloud...";
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('sem', sem);
+            formData.append('type', type);
+
+            try {
+                const res = await fetch('/admin/upload_timetable', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await res.json();
+                if (res.ok) {
+                    status.className = 'status-msg success';
+                    status.innerText = `Success! File ${result.file} uploaded and live.`;
+                    fileInput.value = '';
+                } else {
+                    status.className = 'status-msg error';
+                    status.innerText = "Upload Failed: " + (result.error || "Unknown error");
+                }
+            } catch (e) {
+                status.className = 'status-msg error';
+                status.innerText = "Network Error. Please try again.";
             }
         }
     </script>

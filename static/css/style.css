@@ -22,8 +22,8 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-light);
     color: var(--text-main);
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 h1, h2, h3, .brand-text h1 {
@@ -32,7 +32,7 @@ h1, h2, h3, .brand-text h1 {
 
 .app-container {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
 }
 
@@ -88,20 +88,35 @@ h1, h2, h3, .brand-text h1 {
     }
 
     .main-content {
-        height: 100vh;
+        min-height: 100vh;
+        height: auto;
+        overflow-y: visible;
     }
 
     .top-bar {
         padding: 1rem;
     }
 
+    .banner-section {
+        margin: 1rem;
+        height: 140px;
+    }
+
+    .banner-overlay {
+        padding-left: 1rem;
+    }
+
+    .chat-wrapper {
+        margin: 0 1rem 1rem 1rem;
+    }
+
     .header-info h2 {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .profile-dp {
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
     }
 }
 
@@ -487,10 +502,20 @@ h1, h2, h3, .brand-text h1 {
     box-shadow: 0 25px 60px rgba(0,0,0,0.3);
     overflow: hidden;
     position: relative;
-    max-height: 96vh;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
 }
 
 .modal-body-scroll {
