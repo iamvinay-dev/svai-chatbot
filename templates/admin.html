@@ -241,7 +241,10 @@
 
             <!-- Mentors Tab -->
             <div id="mentors-admin" class="tab-content">
-                <h3>Manage Faculty Mentors</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Manage Faculty Mentors</h3>
+                    <input type="text" id="mentor-search" placeholder="Search by name or group..." onkeyup="filterMentors()" style="width: 250px; padding: 8px 15px; border-radius: 20px; background: #111; border: 1px solid #444; color: white; font-size: 0.85rem;">
+                </div>
                 <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">View and edit the official mentor lists by academic year.</p>
                 
                 <div class="input-group">
@@ -253,60 +256,63 @@
                     </select>
                 </div>
 
-                <div id="mentors-list" style="margin-top: 20px; background: #222; padding: 15px; border-radius: 12px; max-height: 400px; overflow-y: auto;">
+                <div id="mentors-list" style="margin-top: 20px; background: #222; padding: 15px; border-radius: 12px; max-height: 450px; overflow-y: auto; border: 1px solid #333;">
                     <!-- Mentors listed here -->
                 </div>
 
-                <div style="margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
-                    <h4>Add New Mentor</h4>
-                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr; gap: 10px; margin-top: 15px;">
-                        <input type="text" id="m-sl" placeholder="Sl.No" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
-                        <input type="text" id="m-group" placeholder="Group / Course" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
-                        <input type="text" id="m-name" placeholder="Lecturer Name" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                <div style="margin-top: 30px; border-top: 1px solid #444; padding: 20px; background: rgba(26, 35, 126, 0.05); border-radius: 12px;">
+                    <h4 id="mentor-form-title">Add New Mentor</h4>
+                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr; gap: 10px; margin-top: 15px;">
+                        <input type="text" id="m-sl" placeholder="Sl.No">
+                        <input type="text" id="m-group" placeholder="Course / Group">
+                        <input type="text" id="m-name" placeholder="Lecturer Name">
+                        <input type="text" id="m-mobile" placeholder="Mobile (Optional)">
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="addMentor()">Add to List</button>
-                    <button class="btn" style="margin-top: 15px; background: var(--secondary);" onclick="saveMentors()">Save Year Changes to Cloud</button>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="addOrUpdateMentor()" id="mentor-submit-btn">Add to List</button>
+                        <button class="btn" style="background:var(--secondary); width: auto;" onclick="resetMentorForm()">Cancel</button>
+                    </div>
+                    <button class="btn" style="margin-top: 15px; background: var(--success); font-weight: 800;" onclick="saveMentors()">SAVE ALL CHANGES TO CLOUD</button>
                     <div id="m-status" class="status-msg"></div>
                 </div>
             </div>
 
             <!-- Committees Tab -->
             <div id="committees-admin" class="tab-content">
-                <h3>Manage Institutional Committees</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Manage Institutional Committees</h3>
+                    <input type="text" id="committee-search" placeholder="Filter by member name..." onkeyup="filterCommittees()" style="width: 250px; padding: 8px 15px; border-radius: 20px; background: #111; border: 1px solid #444; color: white; font-size: 0.85rem;">
+                </div>
                 <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Updating these lists will instantly reflect in the chatbot and main site.</p>
                 
                 <div class="input-group">
-                    <label>Select Committee</label>
+                    <label>Select Committee Category</label>
                     <div style="display: flex; gap: 10px;">
                         <select id="committee-select" onchange="loadCommitteesAdmin()" style="flex: 1; padding: 10px; border-radius: 8px; background: #333; color: white;">
-                            <option value="Planning & Evaluation">Planning & Evaluation</option>
-                            <option value="Academic Cell">Academic Cell</option>
-                            <option value="Alumni Association">Alumni Association</option>
-                            <option value="Anti-Ragging">Anti-Ragging</option>
-                            <option value="Anti-Drug">Anti-Drug</option>
-                            <option value="Attendance Committee">Attendance Committee</option>
-                            <option value="Calendar & Hand Book">Calendar & Hand Book</option>
-                            <option value="Career Guidance">Career Guidance</option>
+                            <!-- Dynamically populated -->
                         </select>
-                        <button onclick="addCommitteeCategory()" class="btn btn-primary" style="width: auto; padding: 0 15px;">New Category</button>
+                        <button onclick="addCommitteeCategory()" class="btn btn-primary" style="width: auto; padding: 0 15px;">+ New Category</button>
                     </div>
                 </div>
 
-                <div id="committees-admin-list" style="margin-top: 20px; background: #222; padding: 15px; border-radius: 12px; max-height: 400px; overflow-y: auto;">
+                <div id="committees-admin-list" style="margin-top: 20px; background: #222; padding: 15px; border-radius: 12px; max-height: 450px; overflow-y: auto; border: 1px solid #333;">
                     <!-- Members listed here -->
                 </div>
 
-                <div style="margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
-                    <h4>Add New Member</h4>
+                <div style="margin-top: 30px; border-top: 1px solid #444; padding: 20px; background: rgba(0, 176, 255, 0.05); border-radius: 12px;">
+                    <h4 id="committee-form-title">Add New Member</h4>
                     <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr 150px; gap: 10px; margin-top: 15px;">
-                        <input type="text" id="c-sl" placeholder="Sl.No" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
-                        <input type="text" id="c-name" placeholder="Member Name" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
-                        <input type="text" id="c-desig" placeholder="Designation & Dept" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
-                        <input type="text" id="c-role" placeholder="Role (Member/Co-ord)" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
-                        <input type="text" id="c-contact" placeholder="Contact No" style="padding:10px; border-radius:8px; background:#111; border: 1px solid #444; color:white;">
+                        <input type="text" id="c-sl" placeholder="Sl.No">
+                        <input type="text" id="c-name" placeholder="Member Name">
+                        <input type="text" id="c-role" placeholder="Role (e.g. Member)">
+                        <input type="text" id="c-desig" placeholder="Designation & Dept">
+                        <input type="text" id="c-contact" placeholder="Contact No">
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="addCommitteeMember()">Add Member</button>
-                    <button class="btn" style="margin-top: 15px; background: var(--secondary);" onclick="saveCommittees()">Save All Committees</button>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="addOrUpdateCommitteeMember()" id="committee-submit-btn">Add Member</button>
+                        <button class="btn" style="background:var(--secondary); width: auto;" onclick="resetCommitteeForm()">Cancel</button>
+                    </div>
+                    <button class="btn" style="margin-top: 15px; background: var(--success); font-weight: 800;" onclick="saveCommittees()">SAVE ALL COMMITTEES TO CLOUD</button>
                     <div id="c-status" class="status-msg"></div>
                 </div>
             </div>
@@ -422,61 +428,163 @@
 
         // Mentors Management Logic
         let mentorsData = {};
+        let editingMentorIndex = null;
+
         async function loadMentorsAdmin() {
-            const year = document.getElementById('mentor-year-select').value;
             const container = document.getElementById('mentors-list');
-            container.innerHTML = '<p style="text-align:center;">Loading mentors...</p>';
+            container.innerHTML = '<p style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching Mentor Records...</p>';
             try {
                 const res = await fetch('/admin/get_json');
                 const data = await res.json();
                 mentorsData = data.mentors || {};
                 loadMentorsAdminUI();
-            } catch(e) { container.innerHTML = '<p style="color:var(--danger);">Error.</p>'; }
+            } catch(e) { container.innerHTML = '<p style="color:var(--danger);">Connection Error.</p>'; }
         }
 
         function loadMentorsAdminUI() {
-            const year = document.getElementById('mentor-year-select').value;
+            const yearSelect = document.getElementById('mentor-year-select');
+            const rawYear = yearSelect.value;
+            // Support both '1st_year' and '1st Year'
+            const apiKey = rawYear.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const list = mentorsData[apiKey] || mentorsData[rawYear] || [];
+            
+            // Normalize data back to rawYear if it was in apiKey format to keep local state unified
+            mentorsData[rawYear] = list;
+
             const container = document.getElementById('mentors-list');
-            const list = mentorsData[year] || [];
+            if (list.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:20px; color:#666;">No records found for this year.</p>';
+                return;
+            }
+
             container.innerHTML = list.map((m, index) => `
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
-                    <div><strong style="color:var(--primary-light);">${m.sl}.</strong> <span style="color:#eee;">${m.group}</span> - <span style="color:#bbb;">${m.mentor}</span></div>
-                    <button onclick="removeMentor('${year}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                <div class="mentor-row" data-search="${m.mentor.toLowerCase()} ${m.group.toLowerCase()}" style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--primary-light);">
+                    <div style="flex:1;">
+                        <strong style="color:var(--primary-light);">${m.sl}.</strong> 
+                        <span style="color:#eee; font-weight:600;">${m.mentor}</span><br>
+                        <small style="color:#888;">${m.group} ${m.mobile ? ` | ${m.mobile}` : ''}</small>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="editMentor(${index})" style="background:none; border:none; color:var(--info); cursor:pointer;"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="removeMentor('${rawYear}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
             `).join('');
         }
 
-        function addMentor() {
+        function filterMentors() {
+            const query = document.getElementById('mentor-search').value.toLowerCase();
+            document.querySelectorAll('.mentor-row').forEach(row => {
+                row.style.display = row.dataset.search.includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        function editMentor(index) {
+            const year = document.getElementById('mentor-year-select').value;
+            const m = mentorsData[year][index];
+            document.getElementById('m-sl').value = m.sl;
+            document.getElementById('m-group').value = m.group;
+            document.getElementById('m-name').value = m.mentor;
+            document.getElementById('m-mobile').value = m.mobile || "";
+            
+            editingMentorIndex = index;
+            document.getElementById('mentor-form-title').innerText = "Edit Mentor Entry";
+            document.getElementById('mentor-submit-btn').innerText = "Update Member";
+            document.getElementById('mentor-search').scrollIntoView({behavior:'smooth'});
+        }
+
+        function resetMentorForm() {
+            editingMentorIndex = null;
+            document.getElementById('m-sl').value = "";
+            document.getElementById('m-group').value = "";
+            document.getElementById('m-name').value = "";
+            document.getElementById('m-mobile').value = "";
+            document.getElementById('mentor-form-title').innerText = "Add New Mentor";
+            document.getElementById('mentor-submit-btn').innerText = "Add to List";
+        }
+
+        function addOrUpdateMentor() {
             const year = document.getElementById('mentor-year-select').value;
             const sl = document.getElementById('m-sl').value;
             const group = document.getElementById('m-group').value;
             const name = document.getElementById('m-name').value;
-            if(!sl || !group || !name) return;
-            if(!mentorsData[year]) mentorsData[year] = [];
-            mentorsData[year].push({ sl, group, mentor: name, mobile: "" });
+            const mobile = document.getElementById('m-mobile').value;
+
+            if(!sl || !group || !name) { alert("Please fill Sl, Group and Name"); return; }
+            
+            const newObj = { sl, group, mentor: name, mobile };
+
+            if (editingMentorIndex !== null) {
+                mentorsData[year][editingMentorIndex] = newObj;
+            } else {
+                if(!mentorsData[year]) mentorsData[year] = [];
+                mentorsData[year].push(newObj);
+            }
+            
+            resetMentorForm();
             loadMentorsAdminUI();
         }
 
-        function removeMentor(year, index) { mentorsData[year].splice(index, 1); loadMentorsAdminUI(); }
+        function removeMentor(year, index) { 
+            if(confirm("Permanently delete this mentor record?")) {
+                mentorsData[year].splice(index, 1); 
+                loadMentorsAdminUI(); 
+            }
+        }
 
         async function saveMentors() {
-            const res = await fetch('/admin/get_json');
-            const data = await res.json();
-            data.mentors = mentorsData;
-            await fetch('/admin/save_json', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
-            alert("Mentors Saved!");
+            const status = document.getElementById('m-status');
+            status.style.display = 'block';
+            status.className = 'status-msg info';
+            status.innerText = "Syncing Mentor Directory...";
+
+            try {
+                const res = await fetch('/admin/get_json');
+                const data = await res.json();
+                
+                // When saving, we need to make sure we don't duplicate under different key formats
+                // We'll normalize all keys to the '1st Year' format before saving to match college_data consistency
+                const normalizedMentors = {};
+                for (const key in mentorsData) {
+                    const normKey = key.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    normalizedMentors[normKey] = mentorsData[key];
+                }
+
+                data.mentors = normalizedMentors;
+                const saveRes = await fetch('/admin/save_json', { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(data) 
+                });
+
+                if (saveRes.ok) {
+                    status.className = 'status-msg success';
+                    status.innerText = "Mentor Records Saved Successfully!";
+                }
+            } catch(e) {
+                status.className = 'status-msg error';
+                status.innerText = "Cloud Sync Failed.";
+            }
         }
 
         // Committees Management
         let committeesData = {};
+        let editingCommitteeIndex = null;
+
         async function loadCommitteesAdmin() {
-            const name = document.getElementById('committee-select').value;
             const container = document.getElementById('committees-admin-list');
-            container.innerHTML = '<p style="text-align:center;">Loading committee members...</p>';
+            container.innerHTML = '<p style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> Loading Committees...</p>';
             try {
                 const res = await fetch('/admin/get_json');
                 const data = await res.json();
                 committeesData = data.committees || {};
+                
+                // Populate select if empty
+                const select = document.getElementById('committee-select');
+                if (select.options.length <= 1) {
+                    select.innerHTML = Object.keys(committeesData).map(k => `<option value="${k}">${k}</option>`).join('');
+                }
+                
                 loadCommitteesAdminUI();
             } catch(e) { container.innerHTML = '<p style="color:var(--danger);">Error.</p>'; }
         }
@@ -485,44 +593,118 @@
             const name = document.getElementById('committee-select').value;
             const container = document.getElementById('committees-admin-list');
             const list = committeesData[name] || [];
+            
+            if (list.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:20px; color:#666;">No members in this category.</p>';
+                return;
+            }
+
             container.innerHTML = list.map((m, index) => `
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                <div class="committee-row" data-search="${m.name.toLowerCase()} ${m.role.toLowerCase()}" style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--info);">
                     <div style="flex:1;">
-                        <strong style="color:var(--primary-light);">${m.sl}.</strong> 
+                        <strong style="color:var(--info);">${m.sl}.</strong> 
                         <span style="color:#eee; font-weight:600;">${m.name}</span> 
                         <span style="color:#aaa; font-size:0.8rem;">(${m.role})</span>
-                        <div style="font-size:0.75rem; color:#888;">${m.desig} | ${m.contact}</div>
+                        <div style="font-size:0.75rem; color:#888; margin-top:2px;">${m.desig} ${m.contact !== '-' ? `| ${m.contact}` : ''}</div>
                     </div>
-                    <button onclick="removeCommitteeMember('${name}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="editCommitteeMember(${index})" style="background:none; border:none; color:var(--info); cursor:pointer;"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="removeCommitteeMember('${name}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
             `).join('');
         }
 
-        function addCommitteeMember() {
-            const name = document.getElementById('committee-select').value;
+        function filterCommittees() {
+            const query = document.getElementById('committee-search').value.toLowerCase();
+            document.querySelectorAll('.committee-row').forEach(row => {
+                row.style.display = row.dataset.search.includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        function editCommitteeMember(index) {
+            const cat = document.getElementById('committee-select').value;
+            const m = committeesData[cat][index];
+            document.getElementById('c-sl').value = m.sl;
+            document.getElementById('c-name').value = m.name;
+            document.getElementById('c-role').value = m.role;
+            document.getElementById('c-desig').value = m.desig;
+            document.getElementById('c-contact').value = m.contact === '-' ? "" : m.contact;
+            
+            editingCommitteeIndex = index;
+            document.getElementById('committee-form-title').innerText = "Edit Committee Member";
+            document.getElementById('committee-submit-btn').innerText = "Update Member";
+            document.getElementById('committee-search').scrollIntoView({behavior:'smooth'});
+        }
+
+        function resetCommitteeForm() {
+            editingCommitteeIndex = null;
+            document.getElementById('c-sl').value = "";
+            document.getElementById('c-name').value = "";
+            document.getElementById('c-role').value = "";
+            document.getElementById('c-desig').value = "";
+            document.getElementById('c-contact').value = "";
+            document.getElementById('committee-form-title').innerText = "Add New Member";
+            document.getElementById('committee-submit-btn').innerText = "Add Member";
+        }
+
+        function addOrUpdateCommitteeMember() {
+            const cat = document.getElementById('committee-select').value;
             const sl = document.getElementById('c-sl').value;
-            const mname = document.getElementById('c-name').value;
-            const desig = document.getElementById('c-desig').value;
+            const name = document.getElementById('c-name').value;
             const role = document.getElementById('c-role').value;
+            const desig = document.getElementById('c-desig').value;
             const contact = document.getElementById('c-contact').value || "-";
-            if(!sl || !mname || !role) return;
-            if(!committeesData[name]) committeesData[name] = [];
-            committeesData[name].push({ sl, name: mname, desig, role, contact });
+
+            if(!sl || !name || !role) { alert("Sl, Name, and Role are required"); return; }
+            
+            const newObj = { sl, name, role, desig, contact };
+
+            if (editingCommitteeIndex !== null) {
+                committeesData[cat][editingCommitteeIndex] = newObj;
+            } else {
+                if(!committeesData[cat]) committeesData[cat] = [];
+                committeesData[cat].push(newObj);
+            }
+            
+            resetCommitteeForm();
             loadCommitteesAdminUI();
         }
 
-        function removeCommitteeMember(name, index) { committeesData[name].splice(index, 1); loadCommitteesAdminUI(); }
+        function removeCommitteeMember(name, index) { 
+            if(confirm("Remove this member from " + name + "?")) {
+                committeesData[name].splice(index, 1); 
+                loadCommitteesAdminUI(); 
+            }
+        }
 
         async function saveCommittees() {
-            const res = await fetch('/admin/get_json');
-            const data = await res.json();
-            data.committees = committeesData;
-            await fetch('/admin/save_json', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
-            alert("Committees Saved!");
+            const status = document.getElementById('c-status');
+            status.style.display = 'block';
+            status.className = 'status-msg info';
+            status.innerText = "Syncing Committees...";
+
+            try {
+                const res = await fetch('/admin/get_json');
+                const data = await res.json();
+                data.committees = committeesData;
+                const saveRes = await fetch('/admin/save_json', { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(data) 
+                });
+                if (saveRes.ok) {
+                    status.className = 'status-msg success';
+                    status.innerText = "Institutional Committees Updated!";
+                }
+            } catch(e) {
+                status.className = 'status-msg error';
+                status.innerText = "Sync Error.";
+            }
         }
 
         function addCommitteeCategory() {
-            const cat = prompt("New Committee Name:");
+            const cat = prompt("Enter New Committee Category Name:");
             if (cat) {
                 const select = document.getElementById('committee-select');
                 const opt = document.createElement('option');
@@ -533,6 +715,7 @@
                 loadCommitteesAdminUI();
             }
         }
+    </script>
     </script>
 </body>
 </html>
