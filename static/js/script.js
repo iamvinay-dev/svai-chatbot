@@ -165,6 +165,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const whatsappModal = document.getElementById('whatsappModal');
     const closeWhatsappModal = document.getElementById('closeWhatsappModal');
 
+    // 🟢 Mentors Modal Logic
+    const mentorsTab = document.getElementById('mentorsTab');
+    const mentorsModal = document.getElementById('mentorsModal');
+    const closeMentorsModal = document.getElementById('closeMentorsModal');
+
+    if (mentorsTab) {
+        mentorsTab.addEventListener('click', () => {
+            closeMenu();
+            mentorsModal.style.display = 'block';
+            fetchMentors('1st_year');
+        });
+    }
+
+    if (closeMentorsModal) {
+        closeMentorsModal.addEventListener('click', () => mentorsModal.style.display = 'none');
+    }
+
     if (whatsappTab) {
         whatsappTab.addEventListener('click', () => {
             closeMenu();
@@ -308,5 +325,54 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target == coursesModal) coursesModal.style.display = 'none';
         if (e.target == timetableModal) timetableModal.style.display = 'none';
         if (e.target == whatsappModal) whatsappModal.style.display = 'none';
+        if (e.target == mentorsModal) mentorsModal.style.display = 'none';
     });
 });
+
+let currentMentorYear = '1st_year';
+
+async function fetchMentors(year = '1st_year') {
+    currentMentorYear = year;
+    const body = document.getElementById('mentorsTableBody');
+    if (!body) return;
+
+    body.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>';
+
+    try {
+        const res = await fetch('/admin/get_json');
+        if (res.ok) {
+            const data = await res.json();
+            const mentors = data.mentors[year] || [];
+            
+            if (mentors.length > 0) {
+                body.innerHTML = mentors.map(m => `
+                    <tr>
+                        <td style="text-align:center; font-weight:600;">${m.sl}</td>
+                        <td style="font-weight:600; color: #2c3e50;">${m.group}</td>
+                        <td>${m.mentor}</td>
+                        <td style="font-weight:600; color: var(--primary);">
+                            <a href="tel:${m.mobile}" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:5px;">
+                                <i class="fa-solid fa-phone" style="font-size:0.8rem; opacity:0.7;"></i> ${m.mobile}
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                body.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No mentors found for this year.</td></tr>';
+            }
+        }
+    } catch (e) {
+        body.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red; padding:20px;">Failed to load mentor data.</td></tr>';
+    }
+}
+
+function switchMentorYear(year) {
+    // Update tabs UI
+    document.querySelectorAll('.year-tab').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.innerText.toLowerCase().includes(year.split('_')[0])) {
+            btn.classList.add('active');
+        }
+    });
+    fetchMentors(year);
+}

@@ -220,6 +220,7 @@
                 <div class="tab active" onclick="switchTab('knowledge')">Knowledge Base</div>
                 <div class="tab" onclick="switchTab('timetable')">Time Tables</div>
                 <div class="tab" onclick="switchTab('whatsapp')">WhatsApp Groups</div>
+                <div class="tab" onclick="switchTab('mentors-admin')">Mentors</div>
             </div>
 
             <!-- Knowledge Tab -->
@@ -287,6 +288,37 @@
                     <div id="wa-list" style="display: grid; gap: 10px; margin-top: 15px;">
                         <!-- Groups listed here -->
                     </div>
+                </div>
+            </div>
+            <!-- Mentors Tab -->
+            <div id="mentors-admin" class="tab-content">
+                <h3>Manage Faculty Mentors</h3>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">View and edit the official mentor lists by academic year.</p>
+                
+                <div class="input-group">
+                    <label>Select Academic Year</label>
+                    <select id="mentor-year-select" onchange="loadMentorsAdmin()" style="width: 100%; padding: 10px; border-radius: 8px; background: #333; color: white;">
+                        <option value="1st_year">I YEAR</option>
+                        <option value="2nd_year">II YEAR</option>
+                        <option value="3rd_year">III YEAR</option>
+                    </select>
+                </div>
+
+                <div id="mentors-list" style="margin-top: 20px; background: #222; padding: 15px; border-radius: 12px; max-height: 400px; overflow-y: auto;">
+                    <!-- Mentors listed here -->
+                </div>
+
+                <div style="margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
+                    <h4>Add New Mentor</h4>
+                    <div style="display: grid; grid-template-columns: 80px 1fr 1fr 1fr; gap: 10px; margin-top: 15px;">
+                        <input type="text" id="m-sl" placeholder="Sl.No" style="padding:10px; border-radius:8px; background:#333; border:none; color:white;">
+                        <input type="text" id="m-group" placeholder="Group / Course" style="padding:10px; border-radius:8px; background:#333; border:none; color:white;">
+                        <input type="text" id="m-name" placeholder="Lecturer Name" style="padding:10px; border-radius:8px; background:#333; border:none; color:white;">
+                        <input type="text" id="m-mobile" placeholder="Mobile" style="padding:10px; border-radius:8px; background:#333; border:none; color:white;">
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="addMentor()">Add to List</button>
+                    <button class="btn" style="margin-top: 15px; background: var(--secondary);" onclick="saveMentors()">Save Year Changes to Cloud</button>
+                    <div id="m-status" class="status-msg"></div>
                 </div>
             </div>
         </div>
@@ -435,6 +467,122 @@
             }
             setTimeout(() => status.style.display = 'none', 3000);
         }
+
+        // Mentors Management Logic
+        let mentorsData = {};
+
+        async function loadMentorsAdmin() {
+            const year = document.getElementById('mentor-year-select').value;
+            const container = document.getElementById('mentors-list');
+            container.innerHTML = '<p style="text-align:center;">Loading mentors...</p>';
+            
+            try {
+                const res = await fetch('/admin/get_json');
+                const data = await res.json();
+                mentorsData = data.mentors || { "1st_year": [], "2nd_year": [], "3rd_year": [] };
+                
+                const list = mentorsData[year] || [];
+                if (list.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; color:#666;">No mentors found for this year.</p>';
+                    return;
+                }
+
+                container.innerHTML = list.map((m, index) => `
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                        <div>
+                            <strong style="color: var(--primary-light);">${m.sl}.</strong>
+                            <span style="color: #eee;">${m.group}</span> - 
+                            <span style="color: #bbb;">${m.mentor}</span>
+                        </div>
+                        <button onclick="removeMentor('${year}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `).join('');
+            } catch(e) {
+                container.innerHTML = '<p style="color:var(--danger);">Error loading data.</p>';
+            }
+        }
+
+        function addMentor() {
+            const year = document.getElementById('mentor-year-select').value;
+            const sl = document.getElementById('m-sl').value;
+            const group = document.getElementById('m-group').value;
+            const name = document.getElementById('m-name').value;
+            const mobile = document.getElementById('m-mobile').value;
+
+            if(!sl || !group || !name || !mobile) { alert('Fill all fields'); return; }
+
+            if(!mentorsData[year]) mentorsData[year] = [];
+            mentorsData[year].push({ sl, group, mentor: name, mobile });
+            
+            // Clear inputs
+            document.getElementById('m-sl').value = '';
+            document.getElementById('m-group').value = '';
+            document.getElementById('m-name').value = '';
+            document.getElementById('m-mobile').value = '';
+            
+            loadMentorsAdminUI(); // Partial update
+        }
+
+        function loadMentorsAdminUI() {
+            const year = document.getElementById('mentor-year-select').value;
+            const container = document.getElementById('mentors-list');
+            const list = mentorsData[year] || [];
+            
+            container.innerHTML = list.map((m, index) => `
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <div>
+                        <strong style="color: var(--primary-light);">${m.sl}.</strong>
+                        <span style="color: #eee;">${m.group}</span> - 
+                        <span style="color: #bbb;">${m.mentor}</span>
+                    </div>
+                    <button onclick="removeMentor('${year}', ${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function removeMentor(year, index) {
+            mentorsData[year].splice(index, 1);
+            loadMentorsAdminUI();
+        }
+
+        async function saveMentors() {
+            const status = document.getElementById('m-status');
+            status.innerText = 'Connecting to GitHub...';
+            status.className = 'status-msg info';
+
+            try {
+                // Fetch full JSON first
+                const res = await fetch('/admin/get_json');
+                const fullData = await res.json();
+                
+                // Update mentors part
+                fullData.mentors = mentorsData;
+
+                const saveRes = await fetch('/admin/save_json', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(fullData)
+                });
+
+                if (saveRes.ok) {
+                    status.innerText = 'Mentors saved successfully to GitHub!';
+                    status.className = 'status-msg success';
+                } else {
+                    throw new Error('Save failed');
+                }
+            } catch (e) {
+                status.innerText = 'Error: ' + e.message;
+                status.className = 'status-msg error';
+            }
+        }
+
+        // Initialize lists on login or tab switch
+        // Modifying switchTab to handle initialization
+        const originalSwitchTab = switchTab;
+        switchTab = function(tabId) {
+            originalSwitchTab(tabId);
+            if (tabId === 'mentors-admin') loadMentorsAdmin();
+        };
     </script>
 </body>
 </html>
