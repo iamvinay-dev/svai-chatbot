@@ -430,28 +430,41 @@ async function fetchMentors(year = '1st_year') {
     const body = document.getElementById('mentorsTableBody');
     if (!body) return;
 
+    // Show loading if cache is empty
+    if (!knowledgeCache) {
+        body.innerHTML = '<div style="text-align:center; padding:40px; grid-column: 1/-1;"><i class="fa-solid fa-spinner fa-spin"></i> Initializing Directory...</div>';
+    }
+
     try {
         const data = await getKnowledgeData();
         if (data && data.mentors) {
-            const mentors = data.mentors[year] || [];
-            const fragment = document.createDocumentFragment();
+            // Map '1st_year' to '1st Year' for JSON lookup
+            const apiKey = year.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const mentors = data.mentors[apiKey] || data.mentors[year] || [];
             
-            mentors.forEach(m => {
-                const card = document.createElement('div');
-                card.className = 'mentor-card';
-                card.innerHTML = `
-                    <div class="mentor-sl">${m.sl}</div>
-                    <div class="mentor-info">
-                        <h4>${m.mentor}</h4>
-                        <p>${m.group}</p>
-                    </div>
-                    <i class="fa-solid fa-graduation-cap mentor-badge"></i>`;
-                fragment.appendChild(card);
-            });
-            body.innerHTML = '';
-            body.appendChild(fragment);
+            const fragment = document.createDocumentFragment();
+            if (mentors.length > 0) {
+                mentors.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'mentor-card';
+                    card.innerHTML = `
+                        <div class="mentor-sl">${m.sl}</div>
+                        <div class="mentor-info">
+                            <h4>${m.mentor}</h4>
+                            <p>${m.group}</p>
+                            ${m.mobile ? `<p style="font-size:0.8rem; color:#4a5568;"><i class="fa-solid fa-phone" style="font-size:0.7rem;"></i> ${m.mobile}</p>` : ''}
+                        </div>
+                        <i class="fa-solid fa-graduation-cap mentor-badge"></i>`;
+                    fragment.appendChild(card);
+                });
+                body.innerHTML = '';
+                body.appendChild(fragment);
+            } else {
+                body.innerHTML = '<div style="text-align:center; padding:40px; grid-column: 1/-1;">No data found for ' + apiKey + '.</div>';
+            }
         }
     } catch (e) {
+        console.error("Mentor fetch error:", e);
         body.innerHTML = '<div style="color:red; text-align:center; padding:40px; grid-column: 1/-1;">Failed to load mentor data.</div>';
     }
 }
