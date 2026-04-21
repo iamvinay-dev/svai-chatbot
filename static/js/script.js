@@ -190,20 +190,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Loading Schedule...</div>';
+            displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Checking for updates...</div>';
             
-            const response = await fetch(`/static/timetable/sem${semNum}.html`);
-            if (response.ok) {
-                const html = await response.text();
-                // Inject the HTML directly without aggressive filtering
+            // Try HTML first
+            const htmlRes = await fetch(`/static/timetable/sem${semNum}.html`);
+            if (htmlRes.ok) {
+                const html = await htmlRes.text();
                 displayArea.innerHTML = html;
+                return;
+            }
+
+            // Fallback for Word Documents
+            const docRes = await fetch(`/static/timetable/sem${semNum}.doc`);
+            const docxRes = await fetch(`/static/timetable/sem${semNum}.docx`);
+            const exists = docRes.ok || docxRes.ok;
+            const ext = docxRes.ok ? 'docx' : 'doc';
+
+            if (exists) {
+                displayArea.innerHTML = `
+                    <div style="text-align:center; padding: 30px; color: #2c3e50; background: #fff; border-radius: 12px; border: 2px solid #eee;">
+                        <i class="fa-solid fa-file-word" style="font-size: 3rem; margin-bottom: 15px; color: #2b579a;"></i>
+                        <p><strong>Semester ${semNum} schedule is available as a Word document.</strong></p>
+                        <a href="/static/timetable/sem${semNum}.${ext}" download class="btn-primary" style="display:inline-block; margin-top:15px; padding:10px 25px; border-radius:30px; text-decoration:none;">
+                            <i class="fa-solid fa-download"></i> Download Sem ${semNum} Schedule
+                        </a>
+                    </div>`;
             } else {
                 displayArea.innerHTML = `
                     <div style="text-align:center; padding: 30px; color: #7f8c8d; background: #f8f9fa; border-radius: 12px; margin: 10px;">
                         <i class="fa-solid fa-file-circle-exclamation" style="font-size: 3rem; margin-bottom: 15px; color: #e67e22;"></i>
-                        <p style="margin-bottom: 10px;"><strong>Semester ${semNum} detailed schedule is under update.</strong></p>
-                        <p style="font-size: 0.85rem; margin-bottom: 20px;">You can find the academic dates in the full handbook.</p>
-                        <a href="/static/college_data.pdf" target="_blank" style="display:inline-block; padding: 12px 20px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                        <p><strong>Semester ${semNum} detailed schedule is under update.</strong></p>
+                        <p style="font-size: 0.85rem; margin-bottom: 20px;">Please check back in a few days.</p>
+                        <a href="/college_data.pdf" target="_blank" style="display:inline-block; padding: 12px 20px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
                            <i class="fa-solid fa-file-pdf"></i> Download College Handbook (80MB)
                         </a>
                     </div>`;

@@ -1,5 +1,7 @@
 import os
 import json
+import base64
+import requests
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from groq import Groq
@@ -19,6 +21,42 @@ client = Groq(
 
 # 🔐 Admin Panel Settings
 ADMIN_PASSWORD = "svacadmin2025"
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+GITHUB_REPO = os.environ.get("GITHUB_REPO") # Format: "user/repo"
+
+def push_to_github(file_path, content, message, is_binary=False):
+    """Commits a file directly to GitHub repo to make changes permanent on Vercel."""
+    if not GITHUB_TOKEN or not GITHUB_REPO:
+        print("[GITHUB] Missing Token or Repo Config. Skipping cloud commit.")
+        return False
+
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{file_path}"
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Get the current file SHA if it exists (required for updates)
+    res = requests.get(url, headers=headers)
+    sha = res.json().get('sha') if res.status_code == 200 else None
+
+    # Encode content
+    if is_binary:
+        encoded_content = base64.b64encode(content).decode('utf-8')
+    else:
+        encoded_content = base64.b64encode(content.encode('utf-8')).decode('utf-8')
+
+    payload = {
+        "message": message,
+        "content": encoded_content,
+        "branch": "main"
+    }
+    if sha:
+        payload["sha"] = sha
+
+    put_res = requests.put(url, headers=headers, json=payload)
+    return put_res.status_code in [200, 201]
+
 
 @app.route('/')
 def home():
@@ -31,16 +69,10 @@ def chat():
     if not user_message:
         return jsonify({"error": "No message provided"}), 400
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # PRIORITY 1 — KEYWORD / RULE-BASED (zero cost, instant)
-    # ─────────────────────────────────────────────────────────────────────────
     quick = get_quick_response(user_message)
     if quick:
         return jsonify({"response": quick})
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # PRIORITY 3 — AI RESPONSE (LLM fallback)
-    # ─────────────────────────────────────────────────────────────────────────
     try:
         system_prompt = f"""
 You are SVAI Bot, the official AI chatbot of **S.V. Arts College (Autonomous), Tirupati**.
@@ -49,16 +81,7 @@ Your job is to give accurate, fast, and helpful answers to students, staff, and 
 ## RESPONSE RULES:
 1. ALWAYS search the knowledge base below first before answering.
 2. Keep answers SHORT (1-4 lines) and DIRECT.
-3. Use **bold** for important names, numbers, and dates.
-4. Use emojis to make responses friendly and professional.
-5. If info is NOT in the knowledge base, say: "I currently don't have that data. Try asking about: faculty contacts, fees, schedules, rules, or scholarships."
-6. NEVER make up phone numbers, names, or dates.
-7. For phone numbers, always prefix with 📞.
-
-## PERSONALITY:
-- Smart, friendly college assistant
-- Helpful to students, parents, and staff
-- Professional but approachable
+3. If info is NOT in the knowledge base, say: "I currently don't have that data. Try asking about: faculty contacts, fees, schedules, rules, or scholarships."
 
 ## KNOWLEDGE BASE:
 {get_context()}
@@ -77,9 +100,7 @@ Your job is to give accurate, fast, and helpful answers to students, staff, and 
 
     except Exception as e:
         print(f"[app.py] Groq API error: {e}")
-        return jsonify({
-            "response": "⚠️ I'm having trouble connecting right now. Please try again"
-        }), 200
+        return jsonify({ "response": "⚠️ I'm having trouble connecting right now. Please try again" }), 200
 
 
 # 🔍 SEO & File Routes
@@ -117,11 +138,18 @@ def get_json_data():
 
 @app.route('/admin/update_json', methods=['POST'])
 def update_json_data():
-    file_path = os.path.join(os.getcwd(), 'sv_arts_college_COMPLETE.json')
+    file_path = 'sv_arts_college_COMPLETE.json'
     try:
         new_data = request.json
-        with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(new_data, f, indent=2)
+        content = json.dumps(new_data, indent=2)
+        
+        # 1. Update local file
+        with open(os.path.join(os.getcwd(), file_path), 'w', encoding='utf-8') as f:
+            f.write(content)
+        
+        # 2. Update GitHub (Permanent)
+        push_to_github(file_path, content, "Admin: Updated institutional data via dashboard")
+        
         return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -132,15 +160,26 @@ def upload_timetable():
         return jsonify({"error": "No file part"}), 400
     file = request.files['file']
     sem = request.form.get('sem')
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
     
     if file and sem:
-        filename = f"sem{sem}.html"
-        save_path = os.path.join(os.getcwd(), 'static', 'timetable', filename)
+        filename = file.filename
+        ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
+        
+        # Generate standardized name while keeping extension
+        final_filename = f"sem{sem}.{ext}"
+        save_rel_path = f"static/timetable/{final_filename}"
+        save_path = os.path.join(os.getcwd(), save_rel_path)
+        
+        # 1. Save local
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        file.save(save_path)
-        return jsonify({"status": "success"}), 200
+        file_content = file.read()
+        with open(save_path, 'wb') as f:
+            f.write(file_content)
+        
+        # 2. Push to GitHub (Permanent)
+        push_to_github(save_rel_path, file_content, f"Admin: Uploaded Semester {sem} timetable ({ext})", is_binary=True)
+        
+        return jsonify({"status": "success", "file": final_filename}), 200
     return jsonify({"error": "Missing data"}), 400
 
 if __name__ == '__main__':

@@ -232,7 +232,8 @@
 
             <!-- Timetable Tab -->
             <div id="timetable" class="tab-content">
-                <h3>Upload Semester Schedule (.html)</h3>
+                <h3>Upload Semester Schedule (.html, .doc, .docx)</h3>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Files will be committed to GitHub permanently.</p>
                 <div class="file-upload">
                     <div class="input-group">
                         <label>Select Semester (1-8)</label>
@@ -248,10 +249,10 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>HTML File</label>
-                        <input type="file" id="timetable-file" accept=".html">
+                        <label>Schedule File</label>
+                        <input type="file" id="timetable-file" accept=".html,.doc,.docx">
                     </div>
-                    <button class="btn btn-primary" onclick="uploadFile()">Upload & Replace</button>
+                    <button class="btn btn-primary" onclick="uploadFile()">Upload Permanent Change</button>
                 </div>
                 <div id="upload-status" class="status-msg"></div>
             </div>
