@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://svai-chatbot.vercel.app/sitemap.xml

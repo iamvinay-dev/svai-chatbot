@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from groq import Groq
 from knowledge_base import get_context
@@ -146,6 +146,15 @@ def chat():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"response": "I'm having trouble connecting. Please try again later."})
+
+# 🔍 SEO Routes
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory(os.getcwd(), 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory(os.getcwd(), 'sitemap.xml')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
