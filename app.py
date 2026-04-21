@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from groq import Groq
@@ -16,6 +17,8 @@ client = Groq(
     api_key=os.environ.get("GROQ_API_KEY"),
 )
 
+# 🔐 Admin Panel Settings
+ADMIN_PASSWORD = "svacadmin2025"
 
 @app.route('/')
 def home():
@@ -91,6 +94,54 @@ def sitemap():
 @app.route('/college_data.pdf')
 def download_handbook():
     return send_from_directory(os.getcwd(), 'college_data.pdf')
+
+# 🔐 Admin Panel Routes
+@app.route('/admin')
+def admin_panel():
+    return render_template('admin.html')
+
+@app.route('/admin/login', methods=['POST'])
+def admin_login():
+    data = request.json
+    if data.get('password') == ADMIN_PASSWORD:
+        return jsonify({"status": "success"}), 200
+    return jsonify({"status": "error"}), 401
+
+@app.route('/admin/get_json')
+def get_json_data():
+    file_path = os.path.join(os.getcwd(), 'sv_arts_college_COMPLETE.json')
+    if os.path.exists(file_path):
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return jsonify(json.load(f))
+    return jsonify({"error": "File not found"}), 404
+
+@app.route('/admin/update_json', methods=['POST'])
+def update_json_data():
+    file_path = os.path.join(os.getcwd(), 'sv_arts_college_COMPLETE.json')
+    try:
+        new_data = request.json
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(new_data, f, indent=2)
+        return jsonify({"status": "success"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/admin/upload_timetable', methods=['POST'])
+def upload_timetable():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    file = request.files['file']
+    sem = request.form.get('sem')
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+    
+    if file and sem:
+        filename = f"sem{sem}.html"
+        save_path = os.path.join(os.getcwd(), 'static', 'timetable', filename)
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        file.save(save_path)
+        return jsonify({"status": "success"}), 200
+    return jsonify({"error": "Missing data"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

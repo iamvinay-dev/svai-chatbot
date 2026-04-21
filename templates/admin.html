@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | SVAI Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
+            --text-light: #f5f6fa;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-light);
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .admin-container {
+            width: 90%;
+            max-width: 1000px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid var(--glass);
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-screen {
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #fdbb2d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass);
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #json-editor {
+            width: 100%;
+            height: 400px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            border-radius: 12px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--glass);
+            padding: 40px;
+            text-align: center;
+            border-radius: 16px;
+            margin-top: 20px;
+        }
+
+        .status-msg {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Login Screen -->
+        <div id="login-screen" class="login-screen">
+            <h1><i class="fa-solid fa-shield-halved"></i> Admin Login</h1>
+            <div class="input-group">
+                <label>Admin Password</label>
+                <input type="password" id="admin-pass" placeholder="Enter password...">
+            </div>
+            <button class="btn btn-primary" onclick="login()">Access Dashboard</button>
+            <p id="login-error" style="color: var(--danger); margin-top: 15px; display: none;">Invalid credentials!</p>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboard" class="dashboard">
+            <div class="dash-header">
+                <div>
+                    <h2>Welcome, Admin</h2>
+                    <p style="color: #bbb; font-size: 0.9rem;">SVAI Bot Content Management</p>
+                </div>
+                <button class="btn" style="width: auto; background: var(--danger); font-size: 0.8rem;" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('knowledge')">Knowledge Base</div>
+                <div class="tab" onclick="switchTab('timetable')">Time Tables</div>
+            </div>
+
+            <!-- Knowledge Tab -->
+            <div id="knowledge" class="tab-content active">
+                <h3>Edit Complete Institutional Data (JSON)</h3>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Updating this will instantly reflect in the chatbot's answers.</p>
+                <textarea id="json-editor"></textarea>
+                <button class="btn btn-primary" style="margin-top: 20px;" onclick="saveJSON()">Save Institutional Data</button>
+                <div id="save-status" class="status-msg"></div>
+            </div>
+
+            <!-- Timetable Tab -->
+            <div id="timetable" class="tab-content">
+                <h3>Upload Semester Schedule (.html)</h3>
+                <div class="file-upload">
+                    <div class="input-group">
+                        <label>Select Semester (1-8)</label>
+                        <select id="sem-num" style="width: 100%; padding: 10px; border-radius: 8px; background: #333; color: white;">
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                            <option value="7">Semester 7</option>
+                            <option value="8">Semester 8</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>HTML File</label>
+                        <input type="file" id="timetable-file" accept=".html">
+                    </div>
+                    <button class="btn btn-primary" onclick="uploadFile()">Upload & Replace</button>
+                </div>
+                <div id="upload-status" class="status-msg"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authenticated = false;
+
+        async function login() {
+            const pass = document.getElementById('admin-pass').value;
+            const res = await fetch('/admin/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({password: pass})
+            });
+
+            if (res.ok) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                authenticated = true;
+                loadJSON();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            window.location.reload();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        async function loadJSON() {
+            const res = await fetch('/admin/get_json');
+            const data = await res.json();
+            document.getElementById('json-editor').value = JSON.stringify(data, null, 2);
+        }
+
+        async function saveJSON() {
+            const status = document.getElementById('save-status');
+            try {
+                const updatedData = JSON.parse(document.getElementById('json-editor').value);
+                const res = await fetch('/admin/update_json', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (res.ok) {
+                    status.style.display = 'block';
+                    status.style.background = 'var(--success)';
+                    status.innerText = "Data saved successfully!";
+                } else {
+                    throw new Error();
+                }
+            } catch (e) {
+                status.style.display = 'block';
+                status.style.background = 'var(--danger)';
+                status.innerText = "Error: Invalid JSON format or server error!";
+            }
+            setTimeout(() => status.style.display = 'none', 3000);
+        }
+
+        async function uploadFile() {
+            const status = document.getElementById('upload-status');
+            const fileInput = document.getElementById('timetable-file');
+            const semNum = document.getElementById('sem-num').value;
+
+            if (!fileInput.files[0]) return;
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('sem', semNum);
+
+            const res = await fetch('/admin/upload_timetable', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok) {
+                status.style.display = 'block';
+                status.style.background = 'var(--success)';
+                status.innerText = "Time Table uploaded successfully!";
+            } else {
+                status.style.display = 'block';
+                status.style.background = 'var(--danger)';
+                status.innerText = "Upload failed!";
+            }
+            setTimeout(() => status.style.display = 'none', 3000);
+        }
+    </script>
+</body>
+</html>
