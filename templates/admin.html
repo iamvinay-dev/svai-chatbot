@@ -351,11 +351,12 @@
             if (res.ok) {
                 status.style.display = 'block';
                 status.style.background = 'var(--success)';
-                status.innerText = "Time Table uploaded successfully!";
+                status.innerText = "Upload successful! Site will redeploy in 1-2 mins.";
             } else {
+                const err = await res.json();
                 status.style.display = 'block';
                 status.style.background = 'var(--danger)';
-                status.innerText = "Upload failed!";
+                status.innerText = "Error: " + (err.error || "Upload failed!");
             }
             setTimeout(() => status.style.display = 'none', 3000);
         }

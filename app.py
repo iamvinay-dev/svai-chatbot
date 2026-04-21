@@ -91,7 +91,7 @@ Your job is to give accurate, fast, and helpful answers to students, staff, and 
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message}
             ],
-            model="llama3-8b-8192",
+            model="llama-3.3-70b-versatile",
             max_tokens=300,
             temperature=0.3,
         )
@@ -156,32 +156,37 @@ def update_json_data():
 
 @app.route('/admin/upload_timetable', methods=['POST'])
 def upload_timetable():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
-    file = request.files['file']
-    sem = request.form.get('sem')
-    type_val = request.form.get('type', 'academic') # Default to academic
-    
-    if file and sem:
-        filename = file.filename
-        ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
+    try:
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+        file = request.files['file']
+        sem = request.form.get('sem')
+        type_val = request.form.get('type', 'academic')
         
-        # Generate standardized name: sem1_mid1.html
-        final_filename = f"sem{sem}_{type_val}.{ext}"
-        save_rel_path = f"static/timetable/{final_filename}"
-        save_path = os.path.join(os.getcwd(), save_rel_path)
-        
-        # 1. Save local
-        os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        file_content = file.read()
-        with open(save_path, 'wb') as f:
-            f.write(file_content)
-        
-        # 2. Push to GitHub (Permanent)
-        push_to_github(save_rel_path, file_content, f"Admin: Uploaded Semester {sem} timetable ({ext})", is_binary=True)
-        
-        return jsonify({"status": "success", "file": final_filename}), 200
-    return jsonify({"error": "Missing data"}), 400
+        if file and sem:
+            filename = file.filename
+            ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
+            final_filename = f"sem{sem}_{type_val}.{ext}"
+            save_rel_path = f"static/timetable/{final_filename}"
+            save_path = os.path.join(os.getcwd(), save_rel_path)
+            
+            # Save local
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            file_content = file.read()
+            with open(save_path, 'wb') as f:
+                f.write(file_content)
+            
+            # 2. Push to GitHub (Permanent)
+            success = push_to_github(save_rel_path, file_content, f"Admin: Uploaded {final_filename}", is_binary=True)
+            
+            if not success:
+                return jsonify({"error": "GitHub push failed. Please check GITHUB_TOKEN and GITHUB_REPO."}), 500
+                
+            return jsonify({"status": "success", "file": final_filename}), 200
+        return jsonify({"error": "Missing semester or file"}), 400
+    except Exception as e:
+        print(f"[ERROR] Upload failed: {e}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
