@@ -143,13 +143,19 @@ def update_json_data():
         new_data = request.json
         content = json.dumps(new_data, indent=2)
         
-        # 1. Update local file
-        with open(os.path.join(os.getcwd(), file_path), 'w', encoding='utf-8') as f:
-            f.write(content)
+        # 1. Update local file (Optional - will fail on Vercel)
+        try:
+            with open(os.path.join(os.getcwd(), file_path), 'w', encoding='utf-8') as f:
+                f.write(content)
+        except Exception as e:
+            print(f"[LOCAL JSON] Skipping local write (Read-only filesystem): {e}")
         
         # 2. Update GitHub (Permanent)
-        push_to_github(file_path, content, "Admin: Updated institutional data via dashboard")
+        success = push_to_github(file_path, content, "Admin: Updated institutional data via dashboard")
         
+        if not success:
+            return jsonify({"error": "GitHub push failed. Check your Token configuration."}), 500
+            
         return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -170,13 +176,19 @@ def upload_timetable():
             save_rel_path = f"static/timetable/{final_filename}"
             save_path = os.path.join(os.getcwd(), save_rel_path)
             
-            # Save local
-            os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            file_content = file.read()
-            with open(save_path, 'wb') as f:
-                f.write(file_content)
+            # 1. Attempt to save local (Optional - will fail on Vercel)
+            try:
+                os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                file_content = file.read()
+                with open(save_path, 'wb') as f:
+                    f.write(file_content)
+            except Exception as e:
+                print(f"[LOCAL SAVE] Skipping local write (Read-only filesystem): {e}")
+                # We still have the file_content, so we can proceed to GitHub
+                file.seek(0) # Reset file pointer
+                file_content = file.read()
             
-            # 2. Push to GitHub (Permanent)
+            # 2. Push to GitHub (This is the Permanent Save)
             success = push_to_github(save_rel_path, file_content, f"Admin: Uploaded {final_filename}", is_binary=True)
             
             if not success:
