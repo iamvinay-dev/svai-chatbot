@@ -36,19 +36,25 @@ svac_chatbot/
 ```
 
 ## ⚙️ Setup Instructions
-1. **Clone/Download** the repository.
-2. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
+1. **Navigate to project folder**:
+   ```powershell
+   cd svac_chatbot
    ```
-3. **Configure API Key**:
-   - Open `.env` and replace `your_groq_api_key_here` with your actual Groq API key.
-4. **Run the App**:
-   ```bash
+2. **Configure API Key**:
+   Create a file named `.env` in the `svac_chatbot` folder and add:
+   ```text
+   GROQ_API_KEY=your_actual_key_here
+   ```
+3. **Run Locally (One-Click)**:
+   Double-click `run_local.bat` in the project folder. It will handle dependencies and start the server.
+
+4. **Manual Run**:
+   ```powershell
+   pip install -r requirements.txt
    python app.py
    ```
 5. **Access the Chatbot**:
-   - Open `http://127.0.0.1:5000` in your browser.
+   Open `http://127.0.0.1:5000` in your browser.
 
 ## 📄 License
 This project is for educational purposes. SVAC and TTD are trademarks of their respective entities.
