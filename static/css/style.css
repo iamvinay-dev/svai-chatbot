@@ -719,3 +719,45 @@ h1, h2, h3, .brand-text h1 {
         grid-template-columns: 1fr;
     }
 }
+
+/* 📱 WhatsApp & Committee Fixes */
+.whatsapp-card-item {
+    background: #f0f7f4; 
+    border: 1px solid #c8e6c9; 
+    padding: 18px; 
+    border-radius: 16px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 15px; 
+    transition: var(--transition); 
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.whatsapp-card-item:hover {
+    background: #e8f5e9; 
+    transform: translateY(-2px);
+    border-color: #25D366;
+}
+
+#committeesTabContainer {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 5px 5px 15px 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+}
+
+#committeesTabContainer::-webkit-scrollbar {
+    height: 4px;
+}
+
+#committeesTabContainer::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 10px;
+}

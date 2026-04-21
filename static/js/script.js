@@ -1,3 +1,26 @@
+// Global Knowledge Cache for Performance
+let knowledgeCache = null;
+let lastCacheTime = 0;
+const CACHE_TTL = 300000; // 5 minutes
+
+async function getKnowledgeData() {
+    const now = Date.now();
+    if (knowledgeCache && (now - lastCacheTime < CACHE_TTL)) {
+        return knowledgeCache;
+    }
+    try {
+        const res = await fetch('/admin/get_json');
+        if (res.ok) {
+            knowledgeCache = await res.json();
+            lastCacheTime = now;
+            return knowledgeCache;
+        }
+    } catch (e) {
+        console.error("Cache fetch failed:", e);
+    }
+    return knowledgeCache; // Return stale cache if fetch fails
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Menu Toggle
     const sidebar = document.getElementById('sidebar');
@@ -212,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (timetableTab) {
         timetableTab.addEventListener('click', () => {
-            closeMenu(); // Auto-close on mobile
+            closeMenu();
             timetableModal.style.display = 'block';
         });
     }
@@ -265,14 +288,12 @@ document.addEventListener('DOMContentLoaded', () => {
         displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
 
         try {
-            // 1. Try HTML
             const hRes = await fetch(`/static/timetable/${baseName}.html`);
             if (hRes.ok) {
                 displayArea.innerHTML = await hRes.text();
                 return;
             }
 
-            // 2. Try Word (DOC/DOCX)
             const docRes = await fetch(`/static/timetable/${baseName}.doc`);
             const docxRes = await fetch(`/static/timetable/${baseName}.docx`);
             const ext = docxRes.ok ? 'docx' : 'doc';
@@ -296,8 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>`;
             }
 
-            // Scroll to display
-            displayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            displayArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
         } catch (err) {
             displayArea.innerHTML = '<p style="text-align:center; color: red;">Connection error.</p>';
@@ -309,13 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!waContainer) return;
         
         try {
-            const res = await fetch('/admin/get_json');
-            if (res.ok) {
-                const data = await res.json();
-                if (data.whatsapp_groups && data.whatsapp_groups.length > 0) {
-                    waContainer.innerHTML = data.whatsapp_groups.map(g => `
+            const data = await getKnowledgeData();
+            if (data && data.whatsapp_groups && data.whatsapp_groups.length > 0) {
+                const fragment = document.createDocumentFragment();
+                data.whatsapp_groups.forEach(g => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `
                         <a href="${g.link}" target="_blank" style="text-decoration:none; color:inherit;">
-                            <div style="background: #f0f7f4; border: 1px solid #c8e6c9; padding: 18px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; gap: 15px; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" onmouseover="this.style.background='#e8f5e9'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#f0f7f4'; this.style.transform='translateY(0)'">
+                            <div class="whatsapp-card-item">
                                 <div style="display: flex; align-items: center; gap: 15px;">
                                     <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 1.8rem;"></i>
                                     <div>
@@ -325,14 +346,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                                 <i class="fa-solid fa-chevron-right" style="color: #bdc3c7; font-size: 0.8rem;"></i>
                             </div>
-                        </a>
-                    `).join('');
-                } else {
-                    waContainer.innerHTML = '<div style="text-align:center; padding:30px; color:#999;"><i class="fa-solid fa-circle-info" style="font-size:2rem; margin-bottom:10px; opacity:0.5;"></i><p>No official groups added yet.</p></div>';
-                }
+                        </a>`;
+                    fragment.appendChild(div.firstElementChild);
+                });
+                waContainer.innerHTML = '';
+                waContainer.appendChild(fragment);
+            } else {
+                waContainer.innerHTML = '<div style="text-align:center; padding:30px; color:#999;"><p>No official groups added yet.</p></div>';
             }
         } catch (e) {
-            waContainer.innerHTML = '<div style="color:red; text-align:center;">Failed to load links. Please try again.</div>';
+            waContainer.innerHTML = '<div style="color:red; text-align:center;">Failed to load links.</div>';
         }
     }
 
@@ -352,13 +375,10 @@ async function loadCommittees() {
     const tabContainer = document.getElementById('committeesTabContainer');
     if (!tabContainer) return;
 
-    tabContainer.innerHTML = '<p style="padding:10px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Initializing...</p>';
-
     try {
-        const res = await fetch('/admin/get_json');
-        if (res.ok) {
-            const data = await res.json();
-            committeesDataStore = data.committees || {};
+        const data = await getKnowledgeData();
+        if (data && data.committees) {
+            committeesDataStore = data.committees;
             const names = Object.keys(committeesDataStore);
 
             if (names.length > 0) {
@@ -368,12 +388,10 @@ async function loadCommittees() {
                     </button>
                 `).join('');
                 switchCommittee(names[0]);
-            } else {
-                tabContainer.innerHTML = '<p style="padding:10px; color:#aaa;">No committees found.</p>';
             }
         }
     } catch (e) {
-        tabContainer.innerHTML = '<p style="color:red; padding:10px;">Error connecting.</p>';
+        console.error("Committee load error:", e);
     }
 }
 
@@ -387,51 +405,51 @@ function switchCommittee(name, btn = null) {
     const members = committeesDataStore[name] || [];
 
     if (members.length > 0) {
-        content.innerHTML = members.map(m => `
-            <div class="mentor-card">
+        const fragment = document.createDocumentFragment();
+        members.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'mentor-card';
+            card.innerHTML = `
                 <div class="mentor-sl" style="color:var(--primary); opacity:0.3;">${m.sl}</div>
                 <div class="mentor-info">
                     <h4 style="font-size:1rem;">${m.name}</h4>
                     <p style="color:var(--primary); font-weight:700;">${m.role}</p>
                     <p style="font-size:0.8rem; margin-top:2px;">${m.desig}</p>
                     ${m.contact !== '-' ? `<p style="font-size:0.8rem; color:#4a5568; margin-top:5px;"><i class="fa-solid fa-phone" style="font-size:0.7rem;"></i> ${m.contact}</p>` : ''}
-                </div>
-            </div>
-        `).join('');
+                </div>`;
+            fragment.appendChild(card);
+        });
+        content.innerHTML = '';
+        content.appendChild(fragment);
     } else {
         content.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:40px; color:#aaa;">No members listed.</p>';
     }
 }
 
-let currentMentorYear = '1st_year';
-
 async function fetchMentors(year = '1st_year') {
-    currentMentorYear = year;
     const body = document.getElementById('mentorsTableBody');
     if (!body) return;
 
-    body.innerHTML = '<div style="text-align:center; padding:40px; grid-column: 1/-1;"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
-
     try {
-        const res = await fetch('/admin/get_json');
-        if (res.ok) {
-            const data = await res.json();
+        const data = await getKnowledgeData();
+        if (data && data.mentors) {
             const mentors = data.mentors[year] || [];
+            const fragment = document.createDocumentFragment();
             
-            if (mentors.length > 0) {
-                body.innerHTML = mentors.map(m => `
-                    <div class="mentor-card">
-                        <div class="mentor-sl">${m.sl}</div>
-                        <div class="mentor-info">
-                            <h4>${m.mentor}</h4>
-                            <p>${m.group}</p>
-                        </div>
-                        <i class="fa-solid fa-graduation-cap mentor-badge"></i>
+            mentors.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'mentor-card';
+                card.innerHTML = `
+                    <div class="mentor-sl">${m.sl}</div>
+                    <div class="mentor-info">
+                        <h4>${m.mentor}</h4>
+                        <p>${m.group}</p>
                     </div>
-                `).join('');
-            } else {
-                body.innerHTML = '<div style="text-align:center; padding:40px; grid-column: 1/-1;">No mentors found for this year.</div>';
-            }
+                    <i class="fa-solid fa-graduation-cap mentor-badge"></i>`;
+                fragment.appendChild(card);
+            });
+            body.innerHTML = '';
+            body.appendChild(fragment);
         }
     } catch (e) {
         body.innerHTML = '<div style="color:red; text-align:center; padding:40px; grid-column: 1/-1;">Failed to load mentor data.</div>';
