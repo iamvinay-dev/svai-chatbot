@@ -62,7 +62,7 @@ Your job is to give accurate, fast, and helpful answers to students, staff, and 
 2. Keep answers SHORT (1-4 lines) and DIRECT.
 3. Use **bold** for important names, numbers, and dates.
 4. Use emojis to make responses friendly and professional.
-5. If info is NOT in the knowledge base, say: "I don't have that specific detail. Try asking about: faculty contacts, fees, schedules, rules, or scholarships."
+5. If info is NOT in the knowledge base, say: "I currently don't have that data. Try asking about: faculty contacts, fees, schedules, rules, or scholarships."
 6. NEVER make up phone numbers, names, or dates.
 7. For phone numbers, always prefix with 📞.
 
@@ -89,7 +89,7 @@ Your job is to give accurate, fast, and helpful answers to students, staff, and 
     except Exception as e:
         print(f"[app.py] Groq API error: {e}")
         return jsonify({
-            "response": "⚠️ I'm having trouble connecting right now. Please try again or contact the college directly at 📞 **2264602**."
+            "response": "⚠️ I'm having trouble connecting right now. Please try again"
         }), 200
 
 
