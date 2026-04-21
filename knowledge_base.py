@@ -25,10 +25,10 @@ KEYWORD_MAP = {
     "short name": "📌 Short name: **S.V. Arts College**.",
     "sv arts": "🏫 **S.V. Arts College** (Sri Venkateswara Arts College, Autonomous) is located in Tirupati, A.P. Managed by TTD. Principal: Prof. N. Venugopal Reddy (📞 9000489182).",
     "svac": "🏫 SVAC = **S.V. Arts College (Autonomous)**, Tirupati. Managed by Tirumala Tirupati Devasthanams (TTD).",
-    "about college": "🏛️ **S.V. Arts College** was founded in **1945**, managed by TTD. NAAC A+ (3.28 CGPA). Current strength: 3,084 students. 22 labs, 88,000 library volumes, 3 hostel blocks. Principal: Prof. N. Venugopal Reddy.",
-    "history": "📜 **College History**: Founded 1943 (resolved), established **1945**. Initial affiliation: Madras University. SVU affiliation: 1954. Current building occupied: 12-10-1967. Founder Principal: Prof. K. Rami Reddy.",
-    "founded": "📅 S.V. Arts College was **founded in 1945** on the suggestion of Sri V. Raghunatha Reddy, Former Chairman of TTD.",
-    "established": "📅 The college was **established in 1945** and affiliated to Madras University initially, then S.V. University in 1954.",
+    "about college": "🏛️ **S.V. Arts College History**: Founded in **1943** on the suggestion of Sri V. Raghunatha Reddy (Former Chairman, TTD), the college officially came into existence in **1945** with 80 students. It was initially affiliated with Madras University, then became one of the first affiliated with S.V. University in 1954. The current iconic three-storeyed building was occupied on 12-10-1967.",
+    "history": "📜 **College History (Foreword)**:\nIt was in **1943**, on the suggestion of Sri V. Raghunatha Reddy (Former TTD Chairman), that the committee resolved to start a first-grade degree college in Tirupati. S.V. Arts College officially began in **1945** with 80 students, initially affiliated with Madras University. **Prof. K. Rami Reddy** was the founder Principal. In 1954, it was among the first to be affiliated with S.V. University. The current magnificent building was occupied on **12-10-1967**.",
+    "founded": "📅 S.V. Arts College was resolved in 1943 and officially opened in **1945** with Prof. K. Rami Reddy as the founder principal.",
+    "established": "📅 The college was established in **1945**. It moved to its current three-storeyed building on **October 12, 1967**.",
     "motto": "🕉️ College motto: **Om Namo Venkatesaya**",
     "managed by": "🏢 Managed by **Tirumala Tirupati Devasthanams (TTD)**, Tirupati.",
     "ttd": "🏢 **TTD** = Tirumala Tirupati Devasthanams. S.V. Arts College is managed and funded by TTD.",
@@ -294,6 +294,10 @@ KEYWORD_MAP = {
     "sports day": "🏅 **Sports Day Committee**: Prof. Y. Dasaradhudu (📞 9440054764), Dr. S. Mustaq Ahmed (📞 8985136140).",
     "website committee": "🌐 **Website Committee**: Coordinator – Sri C. Ratna Rao (📞 8790835429).",
     "timetable committee": "📅 **Timetable Committee**: Coordinator – Prof. Y. Mallikarjun Rao (📞 9848533623).",
+    "how many committees": "🏢 There are **52 officially constituted committees** in S.V. Arts College for the academic year 2025-26. You can ask for the 'list of committees' to see them all, or ask about a specific one.",
+    "list committees": "📋 The college has 52 committees including: Planning & Evaluation, Academic Cell, Anti-Ragging, Anti-Drug, Discipline, IQAC, Examination Cell, Women Empowerment, and many more. Which one would you like to know about?",
+    "list of committees": "📋 The college has 52 committees including: Planning & Evaluation, Academic Cell, Anti-Ragging, Anti-Drug, Discipline, IQAC, Examination Cell, Women Empowerment, and many more. Which one would you like to know about?",
+    "committee list": "📋 S.V. Arts College has 52 committees. You can ask about any specific committee like 'Anti-Ragging committee members' or 'Discipline committee' to get details.",
 
     # ── IGNOU / OPEN UNIVERSITY ───────────────────────────────────────────────
     "ignou": "🎓 **IGNOU Centre Coordinator**: Prof. P. Bhaskarudu (HoD Mathematics) — 📞 9490108326",
@@ -317,9 +321,10 @@ KEYWORD_MAP = {
     "chandrababu naidu": "🏛️ **Sri N. Chandra Babu Naidu** – Chief Minister of Andhra Pradesh – is an alumni of S.V. Arts College.",
 
     # ── SUCCESSIVE PRINCIPALS ─────────────────────────────────────────────────
-    "successive principals": "👔 S.V. Arts College has had **37 successive principals** since its founding. First: Prof. P.R. Krishna Swamy. Current: Prof. N. Venugopal Reddy (since Feb 2024).",
-    "first principal": "👔 **First Principal**: Prof. P.R. Krishna Swamy (M.A., L.T.) — around 1950.",
-    "founder principal": "👔 **Founder Principal**: Prof. K. Rami Reddy.",
+    "successive principals": "👔 **Successive Principals of SVAC**:\n1. Sri K. Rami Reddy (1945-1950)\n2. Sri P.R. Krishna Swamy (1950-1952)\n3. Sri N. Palani Swamy (1952-1954)\n4. Sri N. Rama Rao (1954-1955)\n5. Sri P.V. Seshagiri Rao (1955-1957)\n6. Sri S. Nagaiah (1957-1959)\n7. Sri B. Raghava Baliga (1959-1960)\n8. Sri Y.V. Ramana (1960-1961)\n9. Sri S. Nagaiah (1961-1962)\n10. Sri N. Rama Rao (June 1962-Dec 1963)\n11. Sri S. Nagaiah (Jan 1963-Sep 1970)\n... and 32 others up to **Prof. N. Venugopal Reddy** (2024-Present). Ask me 'who was principal in [Year]' for details.",
+    "first principal": "👔 **Founder Principal**: Sri K. Rami Reddy, M.A., M.Sc., L.T. (1945-1950).",
+    "founder principal": "👔 **Founder Principal**: Sri K. Rami Reddy, M.A., M.Sc., L.T. (1945-1950).",
+    "current principal": "👨‍🏫 **Current Principal**: Prof. N. Venugopal Reddy (since 1st Feb 2024). 📞 9000489182",
 
     # ── VISION & MISSION ──────────────────────────────────────────────────────
     "vision": "🎯 **Vision**: 1. Transform mediocre students into socially responsible citizens. 2. Extend the bounds of knowledge through multidisciplinary curriculum.",
@@ -378,10 +383,13 @@ def match_keywords(user_message: str) -> str | None:
 
 def get_context() -> str:
     """
-    Returns a rich, structured context string from the COMPLETE JSON file.
+    Returns a rich, structured context string from the institutional JSON file.
     Used as the system prompt for the LLM fallback.
     """
-    json_path = os.path.join(os.path.dirname(__file__), 'sv_arts_college_COMPLETE.json')
+    # Prefer college_data.json as it contains more detailed records
+    json_path = os.path.join(os.path.dirname(__file__), 'college_data.json')
+    if not os.path.exists(json_path):
+        json_path = os.path.join(os.path.dirname(__file__), 'sv_arts_college_COMPLETE.json')
 
     base = """
 === SVAI BOT — FULL KNOWLEDGE BASE: S.V. ARTS COLLEGE (AUTONOMOUS), TIRUPATI ===
@@ -558,12 +566,19 @@ HOSTEL:
 """
 
         # ── Committees (All 52) ────────────────────────────────────────
-        base += "\nCOMMITTEES (2025-26) — All 52:\n"
-        for c in data.get('committees_2025_2026', []):
+        base += "\nCOMMITTEES (2025-26) — Total 52 officially:\n"
+        committees = data.get('committees_2025_2026', [])
+        for c in committees:
+            base += f"\n{c['no']}. {c['name']}\n"
             coordinator = c.get('coordinator', c.get('co_ordinator', {}))
-            coord_name = coordinator.get('name', 'N/A') if isinstance(coordinator, dict) else 'N/A'
-            coord_phone = coordinator.get('phone', '') if isinstance(coordinator, dict) else ''
-            base += f"  {c['no']}. {c['name']} | Coordinator: {coord_name} | 📞 {coord_phone}\n"
+            if isinstance(coordinator, dict) and coordinator.get('name'):
+                base += f"  - Coordinator: {coordinator.get('name')} ({coordinator.get('designation','')}) | 📞 {coordinator.get('phone','')}\n"
+            
+            members = c.get('members', [])
+            if members:
+                base += "  - Members:\n"
+                for m in members:
+                    base += f"    * {m.get('name')} | {m.get('role','Member')} | {m.get('desig', m.get('designation',''))} | 📞 {m.get('phone', m.get('contact',''))}\n"
 
         # ── Mentors ────────────────────────────────────────────────────
         base += "\nMENTORS 2025-26:\n"
@@ -600,6 +615,56 @@ HOSTEL:
         base += "\nNOTABLE ALUMNI:\n"
         for a in data.get('foreword', {}).get('notable_alumni', []):
             base += f"  - {a['name']} ({a['achievement']})\n"
+
+        # ── Successive Principals (Full List) ──────────────────────────
+        base += "\nSUCCESSIVE PRINCIPALS (Full History):\n"
+        principals = [
+            "1. Sri K. Rami Reddy (1945-1950)",
+            "2. Sri P.R. Krishna Swamy (1950-1952)",
+            "3. Sri N. Palani Swamy (1952-1954)",
+            "4. Sri N. Rama Rao (1954-1955)",
+            "5. Sri P.V. Seshagiri Rao (1955-1957)",
+            "6. Sri S. Nagaiah (1957-1959)",
+            "7. Sri B. Raghava Baliga (1959-1960)",
+            "8. Sri Y.V. Ramana (1960-1961)",
+            "9. Sri S. Nagaiah (1961-1962)",
+            "10. Sri N. Rama Rao (June 1962 to Dec 1963)",
+            "11. Sri S. Nagaiah (Jan 1963 to Sep 1970)",
+            "12. Prof. B. Ramasubba Reddy (Sep 1970 to June 1987)",
+            "13. Dr. K. Appaswamy Pillai (July 1987 to May 1992)",
+            "14. Dr. G. Sathyanarayana Rao (May 1992 to June 1995)",
+            "15. Prof. D. Balakrishna Rao (June 1995 to June 1997)",
+            "16. Sri N.V. Nagarajan (June 1997 to June 1999)",
+            "17. Dr. D. Chengal Raju (6th Jun 99 to 30th Jun 99)",
+            "18. Sri P. Jayaram Naidu (1st July 99 to 31st Jul 99)",
+            "19. Dr. S. Sivaiah (1st Aug 99 to 27th Oct 99)",
+            "20. Dr. V. Subramanyam (29th Oct 99 to 21st Aug 2000)",
+            "21. Dr. J. Subramanyam (1st Sept 2000 to 31st May 01)",
+            "22. Dr. S. Sivaiah (1st Jun 01 to 31st Jan 03)",
+            "23. Dr. K. Rama Rao (1st Feb 03 to 4th Aug 03)",
+            "24. Dr. K. Chengaiah Chetty (5th Aug 03 to 30th Sept 05)",
+            "25. Dr. G. Somasundaram (1st Oct 05 to 31st Aug 06)",
+            "26. Dr. N. Syamasundar Naidu (1st Sept 06 to 23rd Mar 07)",
+            "27. Dr. K. Nagaraju (24th Mar 07 to 31st Mar 07)",
+            "28. Sri K. Chandrasekar (1st Apr 07 to 09th Apr 07)",
+            "29. Dr. K. Nagaraju (10th Apr 07 to 27th Mar 08)",
+            "30. Sri K. Chandrasekar (28th Mar 08 to 30th Apr 08)",
+            "31. Dr. N. Sreeramulu (1st May 08 to 31st July 10)",
+            "32. Sri K. Ananda Rao (1st Aug 10 to 18th Aug 10)",
+            "33. Sri N. Nagendra Sai (19th Aug 10 to 31st Aug 12)",
+            "34. Dr. M.D. Christopher (1st Sept 2012 to 27 Apr '13)",
+            "35. Smt. V. Kishori (28 Apr '13 to 31st May 2013)",
+            "36. Dr. M.D. Christopher (10th June '13 to 15th Apr '15)",
+            "37. Dr. A. Vijaya Kumar (16th Apr '15 to 30th Sep '18)",
+            "38. Smt. V. Padmavathi (1st Oct '16 to 31st Aug '18)",
+            "39. Dr. C. Ramesh (1st Sep '18 to 12th Dec '18)",
+            "40. Dr. C. Mani (13th Dec '18 to 6th Oct '19)",
+            "41. Dr. M.D. Christopher (25th Sep '20 to 30th Sep '20)",
+            "42. Dr. T. Narayanamma (7th Oct '19 to 31st Jan '24)",
+            "43. Prof. N. Venugopal Reddy (1st Feb '24 to till date)"
+        ]
+        for p in principals:
+            base += f"  {p}\n"
 
         # ── National/International Days ────────────────────────────────
         base += "\nIMPORTANT NATIONAL/INTERNATIONAL DAYS:\n"
