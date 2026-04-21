@@ -378,10 +378,10 @@ def match_keywords(user_message: str) -> str | None:
 
 def get_context() -> str:
     """
-    Returns a rich, structured context string from the JSON file.
+    Returns a rich, structured context string from the COMPLETE JSON file.
     Used as the system prompt for the LLM fallback.
     """
-    json_path = os.path.join(os.path.dirname(__file__), 'college_data.json')
+    json_path = os.path.join(os.path.dirname(__file__), 'sv_arts_college_COMPLETE.json')
 
     base = """
 === SVAI BOT — FULL KNOWLEDGE BASE: S.V. ARTS COLLEGE (AUTONOMOUS), TIRUPATI ===

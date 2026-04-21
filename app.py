@@ -36,20 +36,6 @@ def chat():
         return jsonify({"response": quick})
 
     # ─────────────────────────────────────────────────────────────────────────
-    # PRIORITY 2 — LEGACY INLINE RULES (kept for backward compatibility)
-    # ─────────────────────────────────────────────────────────────────────────
-    msg_lower = user_message.lower()
-
-    if any(k in msg_lower for k in ["shaik asifa", "chairman"]) and "student" in msg_lower:
-        return jsonify({"response": "🎓 **Student Union Chairman**: Shaik Asifa (B.Sc Biotechnology)."})
-
-    if any(k in msg_lower for k in ["lasya priya", "secretary"]) and "student" in msg_lower:
-        return jsonify({"response": "📜 **Student Union Secretary**: P. Lasya Priya (B.Com CA)."})
-
-    if "principal" in msg_lower:
-        return jsonify({"response": "👨‍🏫 **Principal**: **Prof. N. Venugopal Reddy**, M.Sc, M.Phil, Ph.D. Contact: **9000489182**."})
-
-    # ─────────────────────────────────────────────────────────────────────────
     # PRIORITY 3 — AI RESPONSE (LLM fallback)
     # ─────────────────────────────────────────────────────────────────────────
     try:
