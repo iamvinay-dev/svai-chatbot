@@ -19,7 +19,7 @@
                 <i class="fa-solid fa-xmark"></i>
             </div>
             <div class="brand">
-                <img src="{{ url_for('static', filename='images/college-logo.png') }}" alt="SVAC Logo" class="logo">
+                <img src="{{ url_for('static', filename='images/college-logo.png') }}" alt="SVAC Logo" class="logo" loading="lazy">
                 <div class="brand-text">
                     <h1>SVAC</h1>
                     <p>Tirupati</p>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="user-profile">
                     <span class="status-online">Online</span>
-                    <img src="{{ url_for('static', filename='images/bot-dp.png') }}" alt="User DP" class="profile-dp">
+                    <img src="{{ url_for('static', filename='images/bot-dp.png') }}" alt="User DP" class="profile-dp" loading="lazy">
                 </div>
             </header>
 
@@ -63,7 +63,7 @@
                         <p>Ask anything about courses or campus life.</p>
                     </div>
                 </div>
-                <img src="{{ url_for('static', filename='images/campus-1.jpg') }}" alt="SVAC Campus" class="banner-img">
+                <img src="{{ url_for('static', filename='images/campus-1.jpg') }}" alt="SVAC Campus" class="banner-img" loading="lazy">
             </section>
 
             <!-- Chat Interface -->
@@ -92,7 +92,7 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <div class="modal-header">
-                <img src="{{ url_for('static', filename='images/courses-banner.jpg') }}" alt="Courses" class="modal-banner">
+                <img src="{{ url_for('static', filename='images/courses-banner.jpg') }}" alt="Courses" class="modal-banner" loading="lazy">
                 <h3>Programmes Offered</h3>
             </div>
             <div class="courses-list">
@@ -125,14 +125,14 @@
             <div class="modal-body-scroll">
                 <div class="semester-grid">
                     <!-- Semester Cards -->
-                    <div class="semester-card" onclick="loadSchedule(1)"><i class="fa-solid fa-book-open"></i><span>Semester 1</span></div>
-                    <div class="semester-card" onclick="loadSchedule(2)"><i class="fa-solid fa-book-open"></i><span>Semester 2</span></div>
-                    <div class="semester-card" onclick="loadSchedule(3)"><i class="fa-solid fa-book-open"></i><span>Semester 3</span></div>
-                    <div class="semester-card" onclick="loadSchedule(4)"><i class="fa-solid fa-book-open"></i><span>Semester 4</span></div>
-                    <div class="semester-card" onclick="loadSchedule(5)"><i class="fa-solid fa-book-open"></i><span>Semester 5</span></div>
-                    <div class="semester-card" onclick="loadSchedule(6)"><i class="fa-solid fa-book-open"></i><span>Semester 6</span></div>
-                    <div class="semester-card" onclick="loadSchedule(7)"><i class="fa-solid fa-book-open"></i><span>Semester 7</span></div>
-                    <div class="semester-card" onclick="loadSchedule(8)"><i class="fa-solid fa-book-open"></i><span>Semester 8</span></div>
+                    <div class="semester-card" onclick="loadSchedule(1, this)"><i class="fa-solid fa-book-open"></i><span>Semester 1</span></div>
+                    <div class="semester-card" onclick="loadSchedule(2, this)"><i class="fa-solid fa-book-open"></i><span>Semester 2</span></div>
+                    <div class="semester-card" onclick="loadSchedule(3, this)"><i class="fa-solid fa-book-open"></i><span>Semester 3</span></div>
+                    <div class="semester-card" onclick="loadSchedule(4, this)"><i class="fa-solid fa-book-open"></i><span>Semester 4</span></div>
+                    <div class="semester-card" onclick="loadSchedule(5, this)"><i class="fa-solid fa-book-open"></i><span>Semester 5</span></div>
+                    <div class="semester-card" onclick="loadSchedule(6, this)"><i class="fa-solid fa-book-open"></i><span>Semester 6</span></div>
+                    <div class="semester-card" onclick="loadSchedule(7, this)"><i class="fa-solid fa-book-open"></i><span>Semester 7</span></div>
+                    <div class="semester-card" onclick="loadSchedule(8, this)"><i class="fa-solid fa-book-open"></i><span>Semester 8</span></div>
                 </div>
 
                 <!-- Single Shared Display Area -->

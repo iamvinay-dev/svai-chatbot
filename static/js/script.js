@@ -179,13 +179,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.loadSchedule = async function(semNum) {
+    window.loadSchedule = async function(semNum, element) {
         const displayArea = document.getElementById('scheduleDisplay');
         if (!displayArea) return;
 
         // Visual feedback for selected card
         document.querySelectorAll('.semester-card').forEach(card => card.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        if (element) {
+            element.classList.add('active');
+        } else if (event && event.currentTarget) {
+            event.currentTarget.classList.add('active');
+        }
 
         try {
             displayArea.innerHTML = '<div style="text-align:center; padding: 40px;"><i class="fa-solid fa-spinner fa-spin"></i> Finding Timetable...</div>';

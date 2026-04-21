@@ -26,29 +26,56 @@ def chat():
     if not user_message:
         return jsonify({"error": "No message provided"}), 400
 
-    if "shaik asifa" in user_message or "chairman" in user_message and "student" in user_message:
+    # 🎓 STUDENT UNION & MANAGEMENT
+    if any(k in user_message for k in ["shaik asifa", "chairman"]) and "student" in user_message:
         return jsonify({"response": "🎓 **Student Union Chairman**: Shaik Asifa (B.Sc Biotechnology)."})
 
-    if "lasya priya" in user_message or "secretary" in user_message and "student" in user_message:
+    if any(k in user_message for k in ["lasya priya", "secretary"]) and "student" in user_message:
         return jsonify({"response": "📜 **Student Union Secretary**: P. Lasya Priya (B.Com CA)."})
 
-    if "holiday" in user_message or "break" in user_message:
-        return jsonify({"response": "📅 **Upcoming Holidays**: \n- Dasara: 28-09-2025 to 05-10-2025\n- Sankranthi: 10-01-2026 to 18-01-2026"})
+    if "principal" in user_message:
+        return jsonify({"response": "👨‍🏫 **Principal**: **Prof. N. Venugopal Reddy**, M.Sc, M.Phil, Ph.D. Contact: **9000489182**."})
 
-    if "timing" in user_message or "time" in user_message:
+    # 🏢 DEPARTMENTS & FACULTY
+    if "computer science" in user_message:
+        return jsonify({"response": "💻 **Computer Science Dept**: Headed by **Prof. K. Kameswara Rao**. Faculty includes Sri Chakravarthy, Dr. Jyotsna, and others. They offer Data Science, AI, and CS Honours."})
+
+    if "commerce" in user_message:
+        return jsonify({"response": "💰 **Commerce Dept**: Headed by **Prof. Y. Mallikarjun Rao**. Faculty includes Prof. S. Usha and Dr. B. Nageswar Naik."})
+
+    if "physics" in user_message:
+        return jsonify({"response": "🔭 **Physics Dept**: Headed by **Sri C. Subramanyam**. Notable faculty: Prof. Y. Dasaradhudu and Prof. K. Kameswara Rao."})
+
+    # 🗓️ SCHEDULE & RULES
+    if any(k in user_message for k in ["holiday", "break", "vacation"]):
+        return jsonify({"response": "📅 **Upcoming Holidays**: \n- **Dasara**: 28-09-2025 to 05-10-2025\n- **Sankranthi**: 10-01-2026 to 18-01-2026"})
+
+    if any(k in user_message for k in ["timing", "time", "clock"]):
         return jsonify({"response": "🕒 **College Timings**: 09:30 AM to 04:15 PM (Monday - Saturday)"})
     
-    if "principal" in user_message:
-        return jsonify({"response": "👨‍🏫 **Principal**: Dr. N. Venugopal Reddy, M.Sc, M.Phil, Ph.D."})
-    
-    if "location" in user_message or "where" in user_message and "college" in user_message:
-        return jsonify({"response": "📍 **Location**: S.V. Arts College is located in Tirupati, near the main road. It is managed by TTD."})
+    if any(k in user_message for k in ["uniform", "dress", "dress code"]):
+        return jsonify({"response": "👔 **Uniform Rules**: \n- **Boys**: Sky Blue shirt & Navy Blue pant.\n- **Girls**: Blue salwar kameez with Navy Blue bottom & sky blue top."})
 
-    if "uniform" in user_message or "dress" in user_message:
-        return jsonify({"response": "👔 **Uniform Rules**: \n- Boys: Sky Blue shirt & Navy Blue pant.\n- Girls: Blue salwar kameez, Navy Blue bottom & sky blue top."})
+    if any(k in user_message for k in ["ragging", "complaint", "anti-ragging"]):
+        return jsonify({"response": "🚫 **Anti-Ragging**: Ragging is strictly prohibited. For complaints, contact the Inspector at **9491074524**."})
 
-    if "ragging" in user_message:
-        return jsonify({"response": "🚫 **Ragging is a Crime**: It is strictly prohibited. For complaints, contact the Inspector at **9491074524**."})
+    if "library" in user_message:
+        return jsonify({"response": "📚 **Library**: Open 09:30 AM to 05:00 PM. Features 88,000+ volumes and 200+ journals."})
+
+    # 🌟 NOTABLE ALUMNI
+    if "alumni" in user_message or "famous" in user_message:
+        return jsonify({"response": "🌟 **Notable Alumni**: \n- **Sri N. Chandra Babu Naidu** (Chief Minister of A.P.)\n- **Late S.P. Balasubramanyam** (Great Singer)\n- **B. Karunakar Reddy** (Former M.L.A.)"})
+
+    # 📍 LOCATION
+    if any(k in user_message for k in ["location", "address", "where is"]):
+        return jsonify({"response": "📍 **Location**: S.V. Arts College is located in Tirupati, near the main road. Managed by TTD."})
+
+    # 💰 FEES & SCHOLARSHIPS
+    if "fee" in user_message:
+        return jsonify({"response": "💸 **Fees (Approx.)**: \n- BA: ₹5,400\n- B.Com CA: ₹10,845\n- B.Sc: ₹5,600 - ₹11,045\n(Check official portal for exact details)"})
+
+    if "scholarship" in user_message:
+        return jsonify({"response": "🎓 **Scholarships**: 9 categories available including Govt Social Welfare (SC/ST/BC), Merit Scholarships, and Sports Talent."})
 
     try:
         system_prompt = f"""
@@ -92,9 +119,13 @@ def chat():
         ## 🎯 PERSONALITY
         - Be a helpful, smart, and fast College Assistant.
         - Use emojis to look modern and professional.
+        - If a student asks for a specific faculty member's number, give it from the context.
+        - If they ask about exam dates or schedules, refer to the "Academic Schedule" section.
 
         ---
-        ## 🧩 CONTEXT DATA
+        ## 🧩 INSTITUTIONAL KNOWLEDGE (FULL HANDBOOK DATA)
+        You have access to the complete 86-page college handbook in JSON format. Use this to answer deeply about any department, rules, or history.
+        
         {get_context()}
         """
         

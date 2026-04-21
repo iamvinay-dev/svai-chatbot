@@ -600,3 +600,16 @@ h1, h2, h3, .brand-text h1 {
     background: var(--primary-light);
     transform: translateX(-5px);
 }
+@media (max-width: 480px) {
+    .modal-header h3 {
+        font-size: 1.5rem;
+        left: 20px;
+        bottom: 15px;
+    }
+    .modal-header {
+        height: 160px;
+    }
+    .banner-text h3 {
+        font-size: 1.2rem;
+    }
+}
