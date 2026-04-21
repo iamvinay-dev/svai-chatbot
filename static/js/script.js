@@ -140,12 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.response) {
                 addMessage(data.response, false);
             } else {
-                addMessage("I'm sorry, I encountered an error. Please ensure your `GROQ_API_KEY` is correctly set in the .env file.", false);
+                addMessage("⚠️ I'm having trouble connecting right now. Please try again", false);
             }
         } catch (error) {
             console.error('Error:', error);
             chatContainer.removeChild(loadingDiv);
-            addMessage("Unable to connect to the server. Please check if the Flask app is running.", false);
+            addMessage("⚠️ I'm having trouble connecting right now. Please try again", false);
         }
     }
 

@@ -11,6 +11,7 @@ KEYWORD_MAP = {
     "hi": "👋 Hello! Welcome to **SV Arts College** chatbot. Ask me anything about faculty, fees, schedule, rules, departments, or contacts!",
     "hello": "👋 Hello! I'm **SVAI Bot**. How can I help you today?",
     "hey": "👋 Hey there! Ask me anything about S.V. Arts College.",
+    "hlo": "👋 Hello! I'm **SVAI Bot**. How can I help you today?",
     "good morning": "🌞 Good Morning! How can I assist you today?",
     "good afternoon": "🌤️ Good Afternoon! What would you like to know?",
     "good evening": "🌙 Good Evening! Ask me anything about S.V. Arts College.",
