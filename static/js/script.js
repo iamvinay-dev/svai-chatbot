@@ -336,7 +336,7 @@ async function fetchMentors(year = '1st_year') {
     const body = document.getElementById('mentorsTableBody');
     if (!body) return;
 
-    body.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>';
+    body.innerHTML = '<div style="text-align:center; padding:40px; grid-column: 1/-1;"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
 
     try {
         const res = await fetch('/admin/get_json');
@@ -346,23 +346,21 @@ async function fetchMentors(year = '1st_year') {
             
             if (mentors.length > 0) {
                 body.innerHTML = mentors.map(m => `
-                    <tr>
-                        <td style="text-align:center; font-weight:600;">${m.sl}</td>
-                        <td style="font-weight:600; color: #2c3e50;">${m.group}</td>
-                        <td>${m.mentor}</td>
-                        <td style="font-weight:600; color: var(--primary);">
-                            <a href="tel:${m.mobile}" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:5px;">
-                                <i class="fa-solid fa-phone" style="font-size:0.8rem; opacity:0.7;"></i> ${m.mobile}
-                            </a>
-                        </td>
-                    </tr>
+                    <div class="mentor-card">
+                        <div class="mentor-sl">${m.sl}</div>
+                        <div class="mentor-info">
+                            <h4>${m.mentor}</h4>
+                            <p>${m.group}</p>
+                        </div>
+                        <i class="fa-solid fa-graduation-cap mentor-badge"></i>
+                    </div>
                 `).join('');
             } else {
-                body.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No mentors found for this year.</td></tr>';
+                body.innerHTML = '<div style="text-align:center; padding:40px; grid-column: 1/-1;">No mentors found for this year.</div>';
             }
         }
     } catch (e) {
-        body.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red; padding:20px;">Failed to load mentor data.</td></tr>';
+        body.innerHTML = '<div style="color:red; text-align:center; padding:40px; grid-column: 1/-1;">Failed to load mentor data.</div>';
     }
 }
 
