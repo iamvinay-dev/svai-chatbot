@@ -206,6 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchSchedule() {
         const displayArea = document.getElementById('scheduleDisplay');
+        const waSection = document.getElementById('whatsappSection');
+        const waContainer = document.getElementById('whatsappContainer');
         if (!displayArea) return;
 
         const sem = currentSem;
@@ -215,6 +217,25 @@ document.addEventListener('DOMContentLoaded', () => {
         displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
 
         try {
+            // Load WhatsApp Groups from JSON while fetching schedule
+            const dataRes = await fetch('/admin/get_json'); // Use the same endpoint (or public one)
+            if (dataRes.ok) {
+                const data = await dataRes.json();
+                if (data.whatsapp_groups && data.whatsapp_groups.length > 0) {
+                    waSection.style.display = 'block';
+                    waContainer.innerHTML = data.whatsapp_groups.map(g => `
+                        <a href="${g.link}" target="_blank" style="text-decoration:none; color:inherit;">
+                            <div style="background: #f0f7f4; border: 1px solid #c8e6c9; padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                                <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 1.5rem;"></i>
+                                <span style="font-weight: 600; font-size: 0.9rem;">${g.name}</span>
+                            </div>
+                        </a>
+                    `).join('');
+                } else {
+                    waSection.style.display = 'none';
+                }
+            }
+
             // 1. Try HTML
             const hRes = await fetch(`/static/timetable/${baseName}.html`);
             if (hRes.ok) {

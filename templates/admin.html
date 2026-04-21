@@ -219,6 +219,7 @@
             <div class="tabs">
                 <div class="tab active" onclick="switchTab('knowledge')">Knowledge Base</div>
                 <div class="tab" onclick="switchTab('timetable')">Time Tables</div>
+                <div class="tab" onclick="switchTab('whatsapp')">WhatsApp Groups</div>
             </div>
 
             <!-- Knowledge Tab -->
@@ -263,6 +264,31 @@
                 </div>
                 <div id="upload-status" class="status-msg"></div>
             </div>
+
+            <!-- 🟢 WhatsApp Tab -->
+            <div id="whatsapp" class="tab-content">
+                <h3>Manage WhatsApp Groups</h3>
+                <p style="margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">Links will be saved to the permanent Knowledge Base.</p>
+                
+                <div class="file-upload">
+                    <div class="input-group">
+                        <label>Group Name (e.g. B.Sc 1st Year)</label>
+                        <input type="text" id="wa-name" placeholder="Enter group name..." style="padding:10px; border-radius:8px; width:100%; background:#222; color:white; border:1px solid #444;">
+                    </div>
+                    <div class="input-group">
+                        <label>WhatsApp Link</label>
+                        <input type="text" id="wa-link" placeholder="https://chat.whatsapp.com/..." style="padding:10px; border-radius:8px; width:100%; background:#222; color:white; border:1px solid #444;">
+                    </div>
+                    <button class="btn btn-primary" onclick="addWhatsAppGroup()">Add Group Link</button>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h4>Existing Groups</h4>
+                    <div id="wa-list" style="display: grid; gap: 10px; margin-top: 15px;">
+                        <!-- Groups listed here -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -299,10 +325,59 @@
             document.getElementById(tabId).classList.add('active');
         }
 
+        let globalAppData = null;
+
         async function loadJSON() {
             const res = await fetch('/admin/get_json');
-            const data = await res.json();
-            document.getElementById('json-editor').value = JSON.stringify(data, null, 2);
+            globalAppData = await res.json();
+            document.getElementById('json-editor').value = JSON.stringify(globalAppData, null, 2);
+            renderWhatsAppGroups();
+        }
+
+        function renderWhatsAppGroups() {
+            const list = document.getElementById('wa-list');
+            list.innerHTML = '';
+            if (!globalAppData.whatsapp_groups) globalAppData.whatsapp_groups = [];
+            
+            globalAppData.whatsapp_groups.forEach((group, index) => {
+                const div = document.createElement('div');
+                div.style = "display: flex; justify-content: space-between; background: #333; padding: 12px; border-radius: 8px; align-items: center;";
+                div.innerHTML = `
+                    <div>
+                        <strong style="color: #25D366;">${group.name}</strong><br>
+                        <small style="color: #888;">${group.link}</small>
+                    </div>
+                    <button class="btn btn-danger" style="padding: 5px 10px;" onclick="removeWhatsAppGroup(${index})">Remove</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        async function addWhatsAppGroup() {
+            const name = document.getElementById('wa-name').value.trim();
+            const link = document.getElementById('wa-link').value.trim();
+            
+            if (!name || !link) return alert("Please enter both name and link!");
+            
+            if (!globalAppData.whatsapp_groups) globalAppData.whatsapp_groups = [];
+            globalAppData.whatsapp_groups.push({ name, link });
+            
+            // Save updated JSON
+            document.getElementById('json-editor').value = JSON.stringify(globalAppData, null, 2);
+            await saveJSON();
+            
+            // UI Update
+            document.getElementById('wa-name').value = '';
+            document.getElementById('wa-link').value = '';
+            renderWhatsAppGroups();
+        }
+
+        async function removeWhatsAppGroup(index) {
+            if (!confirm("Are you sure you want to remove this group?")) return;
+            globalAppData.whatsapp_groups.splice(index, 1);
+            document.getElementById('json-editor').value = JSON.stringify(globalAppData, null, 2);
+            await saveJSON();
+            renderWhatsAppGroups();
         }
 
         async function saveJSON() {

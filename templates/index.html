@@ -162,10 +162,21 @@
                 </div>
 
                 <!-- Single Shared Display Area -->
-                <div id="scheduleDisplay" class="schedule-display-area" style="min-height: 250px; padding: 20px; border-top: 2px solid #eee;">
-                    <div style="text-align:center; padding: 60px 20px; color: #bdc3c7;">
-                        <i class="fa-solid fa-arrow-up" style="font-size: 2.5rem; margin-bottom: 15px; display: block; opacity: 0.5;"></i>
-                        <p style="font-size: 1.1rem; font-weight: 500;">Select a Semester to see Download Link</p>
+                <div id="scheduleDisplay" class="schedule-display-area">
+                    <div style="text-align:center; padding: 50px; color: #999;">
+                        <i class="fa-solid fa-calendar-days" style="font-size:3rem; margin-bottom:15px; opacity:0.3;"></i>
+                        <p>Select a Semester to view details</p>
+                    </div>
+                </div>
+
+                <!-- 🟢 New WhatsApp Groups Section -->
+                <div id="whatsappSection" style="margin-top: 30px; padding: 20px; border-top: 1px solid #eee; display:none;">
+                    <h4 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 1.5rem;"></i>
+                        Official WhatsApp Groups
+                    </h4>
+                    <div id="whatsappContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                        <!-- Groups will be loaded here -->
                     </div>
                 </div>
             </div>
