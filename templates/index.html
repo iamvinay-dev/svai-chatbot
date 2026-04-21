@@ -144,15 +144,21 @@
             </div>
             <div class="modal-body-scroll">
                 <div class="semester-grid">
-                    <!-- Semester Cards -->
-                    <div class="semester-card" onclick="loadSchedule(1, this)"><i class="fa-solid fa-book-open"></i><span>Semester 1</span></div>
-                    <div class="semester-card" onclick="loadSchedule(2, this)"><i class="fa-solid fa-book-open"></i><span>Semester 2</span></div>
-                    <div class="semester-card" onclick="loadSchedule(3, this)"><i class="fa-solid fa-book-open"></i><span>Semester 3</span></div>
-                    <div class="semester-card" onclick="loadSchedule(4, this)"><i class="fa-solid fa-book-open"></i><span>Semester 4</span></div>
-                    <div class="semester-card" onclick="loadSchedule(5, this)"><i class="fa-solid fa-book-open"></i><span>Semester 5</span></div>
-                    <div class="semester-card" onclick="loadSchedule(6, this)"><i class="fa-solid fa-book-open"></i><span>Semester 6</span></div>
-                    <div class="semester-card" onclick="loadSchedule(7, this)"><i class="fa-solid fa-book-open"></i><span>Semester 7</span></div>
-                    <div class="semester-card" onclick="loadSchedule(8, this)"><i class="fa-solid fa-book-open"></i><span>Semester 8</span></div>
+                    <!-- Semester Cards (1-6 only as per request) -->
+                    <div class="semester-card" onclick="loadSchedule(1, this)"><i class="fa-solid fa-1"></i><span>Sem 1</span></div>
+                    <div class="semester-card" onclick="loadSchedule(2, this)"><i class="fa-solid fa-2"></i><span>Sem 2</span></div>
+                    <div class="semester-card" onclick="loadSchedule(3, this)"><i class="fa-solid fa-3"></i><span>Sem 3</span></div>
+                    <div class="semester-card" onclick="loadSchedule(4, this)"><i class="fa-solid fa-4"></i><span>Sem 4</span></div>
+                    <div class="semester-card" onclick="loadSchedule(5, this)"><i class="fa-solid fa-5"></i><span>Sem 5</span></div>
+                    <div class="semester-card" onclick="loadSchedule(6, this)"><i class="fa-solid fa-6"></i><span>Sem 6</span></div>
+                </div>
+
+                <!-- Schedule Type Selector (Academic, Mid-1, Mid-2, Sem-End) -->
+                <div id="scheduleTypes" class="schedule-type-tabs" style="display:none; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                    <button class="type-btn active" onclick="changeScheduleType('academic')">Academic</button>
+                    <button class="type-btn" onclick="changeScheduleType('mid1')">Mid-1 Exam</button>
+                    <button class="type-btn" onclick="changeScheduleType('mid2')">Mid-2 Exam</button>
+                    <button class="type-btn" onclick="changeScheduleType('final')">Sem-End Exam</button>
                 </div>
 
                 <!-- Single Shared Display Area -->

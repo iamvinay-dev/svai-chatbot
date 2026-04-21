@@ -160,13 +160,14 @@ def upload_timetable():
         return jsonify({"error": "No file part"}), 400
     file = request.files['file']
     sem = request.form.get('sem')
+    type_val = request.form.get('type', 'academic') # Default to academic
     
     if file and sem:
         filename = file.filename
         ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
         
-        # Generate standardized name while keeping extension
-        final_filename = f"sem{sem}.{ext}"
+        # Generate standardized name: sem1_mid1.html
+        final_filename = f"sem{sem}_{type_val}.{ext}"
         save_rel_path = f"static/timetable/{final_filename}"
         save_path = os.path.join(os.getcwd(), save_rel_path)
         

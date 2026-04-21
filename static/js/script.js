@@ -179,62 +179,78 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.loadSchedule = async function(semNum, element) {
+    // Schedule state
+    let currentSem = 1;
+    let currentType = 'academic';
+
+    window.changeScheduleType = function(type) {
+        currentType = type;
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.innerText.toLowerCase().includes(type) || (type === 'final' && btn.innerText.includes('End')));
+        });
+        fetchSchedule();
+    };
+
+    window.loadSchedule = function(semNum, element) {
+        currentSem = semNum;
+        
+        // UI Feedback
+        document.querySelectorAll('.semester-card').forEach(card => card.classList.remove('active'));
+        if (element) element.classList.add('active');
+        
+        // Show type selector
+        document.getElementById('scheduleTypes').style.display = 'flex';
+        
+        fetchSchedule();
+    };
+
+    async function fetchSchedule() {
         const displayArea = document.getElementById('scheduleDisplay');
         if (!displayArea) return;
 
-        // Visual feedback for selected card
-        document.querySelectorAll('.semester-card').forEach(card => card.classList.remove('active'));
-        if (element) {
-            element.classList.add('active');
-        }
+        const sem = currentSem;
+        const type = currentType;
+        const baseName = `sem${sem}_${type}`;
+
+        displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
 
         try {
-            displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Checking for updates...</div>';
-            
-            // Try HTML first
-            const htmlRes = await fetch(`/static/timetable/sem${semNum}.html`);
-            if (htmlRes.ok) {
-                const html = await htmlRes.text();
-                displayArea.innerHTML = html;
+            // 1. Try HTML
+            const hRes = await fetch(`/static/timetable/${baseName}.html`);
+            if (hRes.ok) {
+                displayArea.innerHTML = await hRes.text();
                 return;
             }
 
-            // Fallback for Word Documents
-            const docRes = await fetch(`/static/timetable/sem${semNum}.doc`);
-            const docxRes = await fetch(`/static/timetable/sem${semNum}.docx`);
-            const exists = docRes.ok || docxRes.ok;
+            // 2. Try Word (DOC/DOCX)
+            const docRes = await fetch(`/static/timetable/${baseName}.doc`);
+            const docxRes = await fetch(`/static/timetable/${baseName}.docx`);
             const ext = docxRes.ok ? 'docx' : 'doc';
+            const hasDoc = docRes.ok || docxRes.ok;
 
-            if (exists) {
+            if (hasDoc) {
                 displayArea.innerHTML = `
-                    <div style="text-align:center; padding: 30px; color: #2c3e50; background: #fff; border-radius: 12px; border: 2px solid #eee;">
-                        <i class="fa-solid fa-file-word" style="font-size: 3rem; margin-bottom: 15px; color: #2b579a;"></i>
-                        <p><strong>Semester ${semNum} schedule is available as a Word document.</strong></p>
-                        <a href="/static/timetable/sem${semNum}.${ext}" download class="btn-primary" style="display:inline-block; margin-top:15px; padding:10px 25px; border-radius:30px; text-decoration:none;">
-                            <i class="fa-solid fa-download"></i> Download Sem ${semNum} Schedule
+                    <div style="text-align:center; padding: 30px; border: 2px solid #eee; border-radius: 12px;">
+                        <i class="fa-solid fa-file-word" style="font-size: 3.5rem; color: #2b579a; margin-bottom: 15px;"></i>
+                        <p><strong>Semester ${sem} - ${type.toUpperCase()} Schedule</strong> is available!</p>
+                        <a href="/static/timetable/${baseName}.${ext}" download class="back-btn" style="display:inline-block; margin-top:15px; background: #2b579a;">
+                            <i class="fa-solid fa-download"></i> Download Word File
                         </a>
                     </div>`;
             } else {
                 displayArea.innerHTML = `
-                    <div style="text-align:center; padding: 30px; color: #7f8c8d; background: #f8f9fa; border-radius: 12px; margin: 10px;">
-                        <i class="fa-solid fa-file-circle-exclamation" style="font-size: 3rem; margin-bottom: 15px; color: #e67e22;"></i>
-                        <p><strong>Semester ${semNum} detailed schedule is under update.</strong></p>
-                        <p style="font-size: 0.85rem; margin-bottom: 20px;">Please check back in a few days.</p>
-                        <a href="/college_data.pdf" target="_blank" style="display:inline-block; padding: 12px 20px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
-                           <i class="fa-solid fa-file-pdf"></i> Download College Handbook (80MB)
-                        </a>
+                    <div style="text-align:center; padding: 40px; color: #7f8c8d;">
+                        <i class="fa-solid fa-calendar-xmark" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                        <p>No ${type} schedule found for Semester ${sem}.</p>
+                        <p style="font-size: 0.8rem; margin-top: 10px;">Please check other categories or the full handbook.</p>
                     </div>`;
             }
 
-            // Scroll to view
-            displayArea.style.display = 'block';
-            setTimeout(() => {
-                displayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+            // Scroll to display
+            displayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         } catch (err) {
-            displayArea.innerHTML = '<p style="text-align:center; padding:20px; color: red;">Connection error. Please try again.</p>';
+            displayArea.innerHTML = '<p style="text-align:center; color: red;">Connection error.</p>';
         }
-    };
+    }
 });
