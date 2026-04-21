@@ -5466,7 +5466,11 @@
   },
   "whatsapp_groups": [
     {
+<<<<<<< HEAD
       "name": "Culutral Group",
+=======
+      "name": "SVAC CULTURAL GROUP",
+>>>>>>> 8c1fe82f45011e9bb35a3e63d4fa3ccb9253d877
       "link": "https://chat.whatsapp.com/DdrEVTLK98v98qb2xyqIcK"
     }
   ]
