@@ -434,7 +434,7 @@ STUDENT UNION (2025-26):
         even = sch.get('even_semesters_II_IV_VI_conventional', {})
         bba = sch.get('semester_I_BBA_BCA', {})
         auto = sch.get('autonomous_II_IV_semester', {})
-        base += f\"\"\"
+        base += f"""
 ACADEMIC SCHEDULE 2025-26:
 Odd Semesters (I/III/V — All UG incl. BBA/BCA):
   - Classes: {odd.get('commencement_of_classes')}
@@ -456,165 +456,165 @@ Autonomous II/IV Semester:
   - Classes: {auto.get('commencement_of_classes')}
   - Sankranthi Holidays: {auto.get('sankranthi_holidays')}
   - End Exams: {auto.get('end_examinations')}
-\"\"\"
+"""
 
         # ── Programmes & Fees ──────────────────────────────────────────
         prog = data.get('programmes_of_study', {})
         yr1 = prog.get('year_1_2025_26', [])
-        base += \"\\nPROGRAMMES (Year 1, 2025-26) & FEES:\\n\"
+        base += "\nPROGRAMMES (Year 1, 2025-26) & FEES:\n"
         for p in yr1:
-            base += f\"  {p['sno']}. {p['program']} | Strength: {p['strength']} | Fee: ₹{p['fee_rs']}/-\\n\"
-        base += f\"Total Sanctioned Strength: {prog.get('total_sanctioned_strength', 1417)}\\n\"
+            base += f"  {p['sno']}. {p['program']} | Strength: {p['strength']} | Fee: ₹{p['fee_rs']}/-\n"
+        base += f"Total Sanctioned Strength: {prog.get('total_sanctioned_strength', 1417)}\n"
 
         fee_reg = prog.get('fee_regulations', {})
-        base += f\"\"\"
+        base += f"""
 FEE PAYMENT:
   - Year 1: {fee_reg.get('year_1_payment')}
   - Year 2: {fee_reg.get('year_2_payment')}
   - Year 3: {fee_reg.get('year_3_payment')}
   Note: {fee_reg.get('removal_from_rolls')}
-\"\"\"
+"""
 
         # ── Scholarships ───────────────────────────────────────────────
         schol = data.get('scholarships', {})
-        base += f\"\\nSCHOLARSHIPS (Attendance req: {schol.get('attendance_requirement')}):\\n\"
+        base += f"\nSCHOLARSHIPS (Attendance req: {schol.get('attendance_requirement')}):\n"
         for s in schol.get('list', []):
-            base += f\"  {s['sno']}. {s['name']} — {s['eligibility']}\\n\"
+            base += f"  {s['sno']}. {s['name']} — {s['eligibility']}\n"
 
         # ── Faculty Departments ────────────────────────────────────────
-        base += \"\\nDEPARTMENTS & FACULTY:\\n\"
+        base += "\nDEPARTMENTS & FACULTY:\n"
         depts = data.get('faculty_members', {}).get('departments', {})
         for dept, members in depts.items():
-            base += f\"\\n[{dept.upper().replace('_',' ')}]\\n\"
+            base += f"\n[{dept.upper().replace('_',' ')}]\n"
             if isinstance(members, list):
                 for m in members:
                     if m.get('name') != 'Vacant':
-                        base += f\"  - {m.get('name')} | {m.get('designation','')} | {m.get('qualifications','')} | 📞 {m.get('phone','')}\\n\"
+                        base += f"  - {m.get('name')} | {m.get('designation','')} | {m.get('qualifications','')} | 📞 {m.get('phone','')}\n"
             elif isinstance(members, dict):
                 # Handle research_guidance
                 rg = members.get('research_guidance', [])
                 if rg:
-                    base += \"  Research Guidance: \" + \", \".join([r if isinstance(r, str) else r.get('name','') for r in rg]) + \"\\n\"
+                    base += "  Research Guidance: " + ", ".join([r if isinstance(r, str) else r.get('name','') for r in rg]) + "\n"
                 for m in members.get('faculty', []):
                     if m.get('name') != 'Vacant':
-                        base += f\"  - {m.get('name')} | {m.get('designation','')} | {m.get('qualifications','')} | 📞 {m.get('phone','')}\\n\"
+                        base += f"  - {m.get('name')} | {m.get('designation','')} | {m.get('qualifications','')} | 📞 {m.get('phone','')}\n"
 
         # ── Non-Teaching Staff ─────────────────────────────────────────
-        base += \"\\nNON-TEACHING STAFF:\\n\"
+        base += "\nNON-TEACHING STAFF:\n"
         for s in data.get('non_teaching_staff', []):
-            base += f\"  {s['sno']}. {s['name']} | {s['designation']} | 📞 {s['phone']}\\n\"
+            base += f"  {s['sno']}. {s['name']} | {s['designation']} | 📞 {s['phone']}\n"
 
         # ── Rules ──────────────────────────────────────────────────────
         att = data.get('rules_of_attendance', {})
-        base += f\"\"\"
+        base += f"""
 ATTENDANCE RULES:
   - Minimum for promotion: {att.get('minimum_for_promotion')}
   - Condonation minimum: {att.get('condonation_minimum')} (Fee: {att.get('condonation_fee')})
   - Periods per day: {att.get('periods_per_day')} (each {att.get('period_duration')})
   - Benefit of attendance for: {', '.join(att.get('benefit_of_attendance_for', []))}
   - Key rules: {' | '.join(att.get('rules', [])[:4])}
-\"\"\"
+"""
 
         dis = data.get('rules_of_discipline', {})
-        base += f\"\"\"
+        base += f"""
 DISCIPLINE:
   - Dress code — Boys: {dis.get('dress_code', {}).get('boys')}
   - Dress code — Girls: {dis.get('dress_code', {}).get('girls')}
   - Identity card: {dis.get('identity_card')}
   - Prohibited: {', '.join(dis.get('prohibited', []))}
-\"\"\"
+"""
 
         rag = data.get('ragging_policy', {})
-        base += f\"\"\"
+        base += f"""
 RAGGING POLICY:
   - Status: {rag.get('status')}
   - Punishment: {rag.get('punishment')}
-  - Contacts: {', '.join([f\\\"{c['designation']}: {c['cell']}\\\" for c in rag.get('contacts', [])])}
-\"\"\"
+  - Contacts: {', '.join([f"{c['designation']}: {c['cell']}" for c in rag.get('contacts', [])])}
+"""
 
         cell = data.get('cell_phone_rules', {})
-        base += \"\\nCELL PHONE RULES:\\n\"
+        base += "\nCELL PHONE RULES:\n"
         for p in cell.get('penalties', []):
-            base += f\"  - {p['offence']}: {p['fine']}\\n\"
+            base += f"  - {p['offence']}: {p['fine']}\n"
 
         lib = data.get('library_rules', {})
-        base += f\"\"\"
+        base += f"""
 LIBRARY:
   - Hours: {lib.get('working_hours')}
   - Issue days: {lib.get('book_issue_days')}
   - Return days: {lib.get('book_return_days')}
   - Loan period: {lib.get('loan_period_days')} days | Fine: {lib.get('overdue_fine')}
   - Quota — Staff: {lib.get('ticket_quota', {}).get('teaching_staff')} | Students: {lib.get('ticket_quota', {}).get('students_all_years')}
-\"\"\"
+"""
 
         # ── Hostel ─────────────────────────────────────────────────────
         hos = data.get('hostel_information', {})
-        base += f\"\"\"
+        base += f"""
 HOSTEL:
   - Blocks: {hos.get('blocks')}
   - Warden: {hos.get('warden', {}).get('name')} | 📞 {hos.get('warden', {}).get('phone')}
-  - Deputy Wardens: {', '.join([f\\\"{d['name']} (📞{d['phone']})\\\" for d in hos.get('deputy_wardens', [])])}
-\"\"\"
+  - Deputy Wardens: {', '.join([f"{d['name']} (📞{d['phone']})" for d in hos.get('deputy_wardens', [])])}
+"""
 
         # ── Committees (All 52) ────────────────────────────────────────
-        base += \"\\nCOMMITTEES (2025-26) — All 52:\\n\"
+        base += "\nCOMMITTEES (2025-26) — All 52:\n"
         for c in data.get('committees_2025_2026', []):
             coordinator = c.get('coordinator', c.get('co_ordinator', {}))
             coord_name = coordinator.get('name', 'N/A') if isinstance(coordinator, dict) else 'N/A'
             coord_phone = coordinator.get('phone', '') if isinstance(coordinator, dict) else ''
-            base += f\"  {c['no']}. {c['name']} | Coordinator: {coord_name} | 📞 {coord_phone}\\n\"
+            base += f"  {c['no']}. {c['name']} | Coordinator: {coord_name} | 📞 {coord_phone}\n"
 
         # ── Mentors ────────────────────────────────────────────────────
-        base += \"\\nMENTORS 2025-26:\\n\"
+        base += "\nMENTORS 2025-26:\n"
         mentors = data.get('mentors_list_2025_2026', {})
         for yr, lst in mentors.items():
-            base += f\"  [{yr.upper()}]\\n\"
+            base += f"  [{yr.upper()}]\n"
             for m in lst:
-                base += f\"    - {m.get('class','')}: {m.get('mentor','N/A')} | 📞 {m.get('phone','')}\\n\"
+                base += f"    - {m.get('class','')}: {m.get('mentor','N/A')} | 📞 {m.get('phone','')}\n"
 
         # ── University Exam Norms ──────────────────────────────────────
-        base += \"\\nEXAMINATION MALPRACTICE NORMS:\\n\"
+        base += "\nEXAMINATION MALPRACTICE NORMS:\n"
         for v in data.get('university_examination_norms', {}).get('violations_and_penalties', []):
-            base += f\"  {v['sno']}. {v['violation']} → {', '.join(v['penalties'])}\\n\"
+            base += f"  {v['sno']}. {v['violation']} → {', '.join(v['penalties'])}\n"
 
         # ── Arjitha Sevas ──────────────────────────────────────────────
-        base += \"\\nARJITHA SEVAS AT TIRUMALA:\\n  Daily Sevas: \"
+        base += "\nARJITHA SEVAS AT TIRUMALA:\n  Daily Sevas: "
         sevas = data.get('arjitha_sevas_tirumala', {})
-        base += \", \".join([s['name'] for s in sevas.get('daily_sevas', [])]) + \"\\n\"
-        base += \"  Annual Sevas: \" + \", \".join([s['name'] for s in sevas.get('annual_periodical_sevas', [])]) + \"\\n\"
+        base += ", ".join([s['name'] for s in sevas.get('daily_sevas', [])]) + "\n"
+        base += "  Annual Sevas: " + ", ".join([s['name'] for s in sevas.get('annual_periodical_sevas', [])]) + "\n"
 
         # ── Telephone Numbers ──────────────────────────────────────────
         phones = data.get('important_telephone_numbers', {})
         tirupati = phones.get('tirupati', {})
         tirumala = phones.get('tirumala', {})
-        base += \"\\nIMPORTANT TELEPHONE NUMBERS:\\n\"
-        base += \"  Tirupati:\\n\"
+        base += "\nIMPORTANT TELEPHONE NUMBERS:\n"
+        base += "  Tirupati:\n"
         for k, v in tirupati.items():
-            base += f\"    {k}: {v}\\n\"
-        base += \"  Tirumala:\\n\"
+            base += f"    {k}: {v}\n"
+        base += "  Tirumala:\n"
         for k, v in tirumala.items():
-            base += f\"    {k}: {v}\\n\"
+            base += f"    {k}: {v}\n"
 
         # ── Notable Alumni ─────────────────────────────────────────────
-        base += \"\\nNOTABLE ALUMNI:\\n\"
+        base += "\nNOTABLE ALUMNI:\n"
         for a in data.get('foreword', {}).get('notable_alumni', []):
-            base += f\"  - {a['name']} ({a['achievement']})\\n\"
+            base += f"  - {a['name']} ({a['achievement']})\n"
 
         # ── National/International Days ────────────────────────────────
-        base += \"\\nIMPORTANT NATIONAL/INTERNATIONAL DAYS:\\n\"
+        base += "\nIMPORTANT NATIONAL/INTERNATIONAL DAYS:\n"
         for d in data.get('important_national_international_days', []):
-            base += f\"  - {d['date']}: {d['significance']}\\n\"
+            base += f"  - {d['date']}: {d['significance']}\n"
 
         return base
 
     except Exception as e:
-        print(f\"[knowledge_base] Error reading JSON: {e}\")
+        print(f"[knowledge_base] Error reading JSON: {e}")
         return base
 
 
 def get_quick_response(user_message: str) -> str | None:
-    \"\"\"
+    """
     Public API used by app.py before calling the LLM.
     Returns a matched keyword answer or None.
-    \"\"\"
+    """
     return match_keywords(user_message)
