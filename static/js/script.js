@@ -187,12 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.semester-card').forEach(card => card.classList.remove('active'));
         if (element) {
             element.classList.add('active');
-        } else if (event && event.currentTarget) {
-            event.currentTarget.classList.add('active');
         }
 
         try {
-            displayArea.innerHTML = '<div style="text-align:center; padding: 40px;"><i class="fa-solid fa-spinner fa-spin"></i> Finding Timetable...</div>';
+            displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Loading Schedule...</div>';
             
             const response = await fetch(`/static/timetable/sem${semNum}.html`);
             if (response.ok) {
@@ -200,22 +198,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Remove weird diamond characters gracefully
                 const cleanHtml = html.replace(/[^\x20-\x7E\s\u00A0-\u00FF]/g, "");
                 displayArea.innerHTML = cleanHtml;
-                
-                // Ensure it scrolls into view
-                displayArea.style.display = 'block';
-                setTimeout(() => {
-                    displayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
             } else {
                 displayArea.innerHTML = `
-                    <div style="text-align:center; padding: 30px; color: #7f8c8d;">
-                        <i class="fa-solid fa-file-circle-exclamation" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                        <p><strong>Timetable for Semester ${semNum} is not uploaded yet.</strong></p>
-                        <p style="font-size: 0.8rem;">Please check back later or contact the HOD.</p>
+                    <div style="text-align:center; padding: 30px; color: #7f8c8d; background: #f8f9fa; border-radius: 12px; margin: 10px;">
+                        <i class="fa-solid fa-file-circle-exclamation" style="font-size: 3rem; margin-bottom: 15px; color: #e67e22;"></i>
+                        <p style="margin-bottom: 10px;"><strong>Semester ${semNum} detailed schedule is under update.</strong></p>
+                        <p style="font-size: 0.85rem; margin-bottom: 20px;">You can find the academic dates in the full handbook.</p>
+                        <a href="/static/college_data.pdf" target="_blank" style="display:inline-block; padding: 12px 20px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                           <i class="fa-solid fa-file-pdf"></i> Download College Handbook (80MB)
+                        </a>
                     </div>`;
             }
+
+            // Scroll to view
+            displayArea.style.display = 'block';
+            setTimeout(() => {
+                displayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+
         } catch (err) {
-            displayArea.innerHTML = '<p style="text-align:center; padding:20px;">Connection error. Please try again.</p>';
+            displayArea.innerHTML = '<p style="text-align:center; padding:20px; color: red;">Connection error. Please try again.</p>';
         }
     };
 });
