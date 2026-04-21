@@ -51,6 +51,7 @@
                 <a href="https://svac.edu.in" target="_blank" class="nav-item"><i class="fa-solid fa-globe"></i> Official Site</a>
                 <a href="javascript:void(0)" class="nav-item" id="coursesTab"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
                 <a href="javascript:void(0)" class="nav-item" id="timetableTab"><i class="fa-solid fa-calendar-days"></i> Time Tables</a>
+                <a href="javascript:void(0)" class="nav-item" id="whatsappTab"><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i> WhatsApp Groups</a>
             </nav>
 
             <div class="sidebar-footer">
@@ -168,20 +169,28 @@
                         <p>Select a Semester to view details</p>
                     </div>
                 </div>
-
-                <!-- 🟢 New WhatsApp Groups Section -->
-                <div id="whatsappSection" style="margin-top: 30px; padding: 20px; border-top: 1px solid #eee; display:none;">
-                    <h4 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                        <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 1.5rem;"></i>
-                        Official WhatsApp Groups
-                    </h4>
-                    <div id="whatsappContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
-                        <!-- Groups will be loaded here -->
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button class="back-btn" id="backFromTimetable"><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🟢 Dedicated WhatsApp Groups Modal -->
+    <div id="whatsappModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #25D366, #128C7E); color:white;">
+                <h2 style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-brands fa-whatsapp"></i> Official WhatsApp Groups
+                </h2>
+                <span class="close" id="closeWhatsappModal">&times;</span>
+            </div>
+            <div class="modal-body" style="padding: 30px;">
+                <p style="color: #666; margin-bottom: 25px; text-align: center;">Join your official class groups and stay updated with latest college announcements.</p>
+                <div id="whatsappContainer" style="display: grid; gap: 15px;">
+                    <!-- Dynamically loaded -->
+                    <div style="text-align:center; padding:20px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Loading links...</div>
+                </div>
             </div>
         </div>
     </div>

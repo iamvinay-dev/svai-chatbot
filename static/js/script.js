@@ -154,11 +154,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') handleSendMessage();
     });
 
-    // Time Table Logic
+    // Timetable Modal Logic
     const timetableTab = document.getElementById('timetableTab');
     const timetableModal = document.getElementById('timetableModal');
-    const closeTimetable = document.getElementById('closeTimetable');
+    const closeTimetableModal = document.getElementById('closeTimetableModal');
     const backFromTimetable = document.getElementById('backFromTimetable');
+
+    // 🟢 WhatsApp Modal Logic
+    const whatsappTab = document.getElementById('whatsappTab');
+    const whatsappModal = document.getElementById('whatsappModal');
+    const closeWhatsappModal = document.getElementById('closeWhatsappModal');
+
+    if (whatsappTab) {
+        whatsappTab.addEventListener('click', () => {
+            closeMenu();
+            whatsappModal.style.display = 'block';
+            fetchWhatsAppGroups();
+        });
+    }
+
+    if (closeWhatsappModal) {
+        closeWhatsappModal.addEventListener('click', () => whatsappModal.style.display = 'none');
+    }
 
     if (timetableTab) {
         timetableTab.addEventListener('click', () => {
@@ -167,8 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (closeTimetable) {
-        closeTimetable.addEventListener('click', () => {
+    if (closeTimetableModal) {
+        closeTimetableModal.addEventListener('click', () => {
             timetableModal.style.display = 'none';
         });
     }
@@ -206,8 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchSchedule() {
         const displayArea = document.getElementById('scheduleDisplay');
-        const waSection = document.getElementById('whatsappSection');
-        const waContainer = document.getElementById('whatsappContainer');
         if (!displayArea) return;
 
         const sem = currentSem;
@@ -217,25 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
         displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
 
         try {
-            // Load WhatsApp Groups from JSON while fetching schedule
-            const dataRes = await fetch('/admin/get_json'); // Use the same endpoint (or public one)
-            if (dataRes.ok) {
-                const data = await dataRes.json();
-                if (data.whatsapp_groups && data.whatsapp_groups.length > 0) {
-                    waSection.style.display = 'block';
-                    waContainer.innerHTML = data.whatsapp_groups.map(g => `
-                        <a href="${g.link}" target="_blank" style="text-decoration:none; color:inherit;">
-                            <div style="background: #f0f7f4; border: 1px solid #c8e6c9; padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                                <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 1.5rem;"></i>
-                                <span style="font-weight: 600; font-size: 0.9rem;">${g.name}</span>
-                            </div>
-                        </a>
-                    `).join('');
-                } else {
-                    waSection.style.display = 'none';
-                }
-            }
-
             // 1. Try HTML
             const hRes = await fetch(`/static/timetable/${baseName}.html`);
             if (hRes.ok) {
@@ -274,4 +270,43 @@ document.addEventListener('DOMContentLoaded', () => {
             displayArea.innerHTML = '<p style="text-align:center; color: red;">Connection error.</p>';
         }
     }
+
+    async function fetchWhatsAppGroups() {
+        const waContainer = document.getElementById('whatsappContainer');
+        if (!waContainer) return;
+        
+        try {
+            const res = await fetch('/admin/get_json');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.whatsapp_groups && data.whatsapp_groups.length > 0) {
+                    waContainer.innerHTML = data.whatsapp_groups.map(g => `
+                        <a href="${g.link}" target="_blank" style="text-decoration:none; color:inherit;">
+                            <div style="background: #f0f7f4; border: 1px solid #c8e6c9; padding: 18px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; gap: 15px; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" onmouseover="this.style.background='#e8f5e9'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#f0f7f4'; this.style.transform='translateY(0)'">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 1.8rem;"></i>
+                                    <div>
+                                        <h4 style="margin:0; font-size: 1.05rem; color: #2c3e50;">${g.name}</h4>
+                                        <p style="margin:0; font-size: 0.8rem; color: #7f8c8d;">Official Community Group</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right" style="color: #bdc3c7; font-size: 0.8rem;"></i>
+                            </div>
+                        </a>
+                    `).join('');
+                } else {
+                    waContainer.innerHTML = '<div style="text-align:center; padding:30px; color:#999;"><i class="fa-solid fa-circle-info" style="font-size:2rem; margin-bottom:10px; opacity:0.5;"></i><p>No official groups added yet.</p></div>';
+                }
+            }
+        } catch (e) {
+            waContainer.innerHTML = '<div style="color:red; text-align:center;">Failed to load links. Please try again.</div>';
+        }
+    }
+
+    // Modal Global Click
+    window.addEventListener('click', (e) => {
+        if (e.target == coursesModal) coursesModal.style.display = 'none';
+        if (e.target == timetableModal) timetableModal.style.display = 'none';
+        if (e.target == whatsappModal) whatsappModal.style.display = 'none';
+    });
 });
