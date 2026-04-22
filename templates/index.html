@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVAI Bot | Sri Venkateswara Arts College (TTD)</title>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-STFK9LZS95"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-STFK9LZS95');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-STFK9LZS95');
     </script>
-    
+
     <!-- SEO Meta Tags -->
-    <meta name="description" content="SVAI Bot is the official AI assistant of Sri Venkateswara Arts College (TTD), Tirupati. Get instant answers about faculty, scholarships, fees, and institution data.">
-    <meta name="keywords" content="svai chatbot, SV Arts College Chatbot, SVAI Bot, Tirupati College Bot, TTD College Assistant, svac ai, sv college chatbot">
+    <meta name="description"
+        content="SVAI Bot is the official AI assistant of Sri Venkateswara Arts College (TTD), Tirupati. Get instant answers about faculty, scholarships, fees, and institution data.">
+    <meta name="keywords"
+        content="svai chatbot, SV Arts College Chatbot, SVAI Bot, Tirupati College Bot, TTD College Assistant, svac ai, sv college chatbot">
     <meta name="author" content="SV Arts College">
     <meta name="robots" content="index, follow">
 
@@ -24,22 +27,27 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://svai-chatbot.vercel.app/">
     <meta property="og:title" content="SVAI Bot | Official SV Arts College Assistant">
-    <meta property="og:description" content="Official AI chatbot for Sri Venkateswara Arts College, Tirupati. Access 86 pages of handbook data instantly.">
+    <meta property="og:description"
+        content="Official AI chatbot for Sri Venkateswara Arts College, Tirupati. Access 86 pages of handbook data instantly.">
     <meta property="og:image" content="https://svai-chatbot.vercel.app/static/img/banner.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://svai-chatbot.vercel.app/">
     <meta property="twitter:title" content="SVAI Bot | SV Arts College Assistant">
-    <meta property="twitter:description" content="The smartest AI assistant for students of Sri Venkateswara Arts College.">
+    <meta property="twitter:description"
+        content="The smartest AI assistant for students of Sri Venkateswara Arts College.">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Sidebar / Navigation -->
@@ -48,21 +56,28 @@
                 <i class="fa-solid fa-xmark"></i>
             </div>
             <div class="brand">
-                <img src="{{ url_for('static', filename='images/college-logo.png') }}" alt="SVAC Logo" class="logo" loading="lazy">
+                <img src="{{ url_for('static', filename='images/college-logo.png') }}" alt="SVAC Logo" class="logo"
+                    loading="lazy">
                 <div class="brand-text">
                     <h1>SVAC</h1>
                     <p>Tirupati</p>
                 </div>
             </div>
-            
+
             <nav class="nav-menu">
                 <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i> Home</a>
-                <a href="javascript:void(0)" class="nav-item" id="mentorsTab"><i class="fa-solid fa-people-group"></i> Mentors</a>
-                <a href="javascript:void(0)" class="nav-item" id="committeesTab"><i class="fa-solid fa-users-gear"></i> Committees</a>
-                <a href="https://svac.edu.in" target="_blank" class="nav-item"><i class="fa-solid fa-globe"></i> Official Site</a>
-                <a href="javascript:void(0)" class="nav-item" id="coursesTab"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
-                <a href="javascript:void(0)" class="nav-item" id="timetableTab"><i class="fa-solid fa-calendar-days"></i> Time Tables</a>
-                <a href="javascript:void(0)" class="nav-item" id="whatsappTab"><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i> WhatsApp Groups</a>
+                <a href="javascript:void(0)" class="nav-item" id="mentorsTab"><i class="fa-solid fa-people-group"></i>
+                    Mentors</a>
+                <a href="javascript:void(0)" class="nav-item" id="committeesTab"><i class="fa-solid fa-users-gear"></i>
+                    Committees</a>
+                <a href="https://svac.edu.in" target="_blank" class="nav-item"><i class="fa-solid fa-globe"></i>
+                    Official Site</a>
+                <a href="javascript:void(0)" class="nav-item" id="coursesTab"><i class="fa-solid fa-graduation-cap"></i>
+                    Courses</a>
+                <a href="javascript:void(0)" class="nav-item" id="timetableTab"><i
+                        class="fa-solid fa-calendar-days"></i> Time Tables</a>
+                <a href="javascript:void(0)" class="nav-item" id="whatsappTab"><i class="fa-brands fa-whatsapp"
+                        style="color: #25D366;"></i> WhatsApp Groups</a>
             </nav>
 
             <div class="sidebar-footer">
@@ -84,7 +99,8 @@
                 </div>
                 <div class="user-profile">
                     <span class="status-online">Online</span>
-                    <img src="{{ url_for('static', filename='images/bot-dp.png') }}" alt="User DP" class="profile-dp" loading="lazy">
+                    <img src="{{ url_for('static', filename='images/bot-dp.png') }}" alt="User DP" class="profile-dp"
+                        loading="lazy">
                 </div>
             </header>
 
@@ -95,7 +111,8 @@
                         <p>Ask anything about courses or campus life.</p>
                     </div>
                 </div>
-                <img src="{{ url_for('static', filename='images/campus-1.jpg') }}" alt="SVAC Campus" class="banner-img" loading="lazy">
+                <img src="{{ url_for('static', filename='images/campus-1.jpg') }}" alt="SVAC Campus" class="banner-img"
+                    loading="lazy">
             </section>
 
             <!-- Chat Interface -->
@@ -124,7 +141,8 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <div class="modal-header">
-                <img src="{{ url_for('static', filename='images/courses-banner.jpg') }}" alt="Courses" class="modal-banner" loading="lazy">
+                <img src="{{ url_for('static', filename='images/courses-banner.jpg') }}" alt="Courses"
+                    class="modal-banner" loading="lazy">
                 <h3>Programmes Offered</h3>
             </div>
             <div class="courses-list">
@@ -150,23 +168,31 @@
     <!-- Time Table Modal -->
     <div id="timetableModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" id="closeTimetableModal" style="font-size: 2.5rem; top: 10px; right: 20px;">&times;</span>
+            <span class="close-modal" id="closeTimetableModal"
+                style="font-size: 2.5rem; top: 10px; right: 20px;">&times;</span>
             <div class="modal-header" style="height: 120px; background: var(--primary);">
                 <h3>Academic Time Tables</h3>
             </div>
             <div class="modal-body-scroll">
                 <div class="semester-grid">
                     <!-- Semester Cards (1-6 only as per request) -->
-                    <div class="semester-card" onclick="loadSchedule(1, this)"><i class="fa-solid fa-1"></i><span>Sem 1</span></div>
-                    <div class="semester-card" onclick="loadSchedule(2, this)"><i class="fa-solid fa-2"></i><span>Sem 2</span></div>
-                    <div class="semester-card" onclick="loadSchedule(3, this)"><i class="fa-solid fa-3"></i><span>Sem 3</span></div>
-                    <div class="semester-card" onclick="loadSchedule(4, this)"><i class="fa-solid fa-4"></i><span>Sem 4</span></div>
-                    <div class="semester-card" onclick="loadSchedule(5, this)"><i class="fa-solid fa-5"></i><span>Sem 5</span></div>
-                    <div class="semester-card" onclick="loadSchedule(6, this)"><i class="fa-solid fa-6"></i><span>Sem 6</span></div>
+                    <div class="semester-card" onclick="loadSchedule(1, this)"><i class="fa-solid fa-1"></i><span>Sem
+                            1</span></div>
+                    <div class="semester-card" onclick="loadSchedule(2, this)"><i class="fa-solid fa-2"></i><span>Sem
+                            2</span></div>
+                    <div class="semester-card" onclick="loadSchedule(3, this)"><i class="fa-solid fa-3"></i><span>Sem
+                            3</span></div>
+                    <div class="semester-card" onclick="loadSchedule(4, this)"><i class="fa-solid fa-4"></i><span>Sem
+                            4</span></div>
+                    <div class="semester-card" onclick="loadSchedule(5, this)"><i class="fa-solid fa-5"></i><span>Sem
+                            5</span></div>
+                    <div class="semester-card" onclick="loadSchedule(6, this)"><i class="fa-solid fa-6"></i><span>Sem
+                            6</span></div>
                 </div>
 
                 <!-- Schedule Type Selector (Academic, Mid-1, Mid-2, Sem-End) -->
-                <div id="scheduleTypes" class="schedule-type-tabs" style="display:none; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                <div id="scheduleTypes" class="schedule-type-tabs"
+                    style="display:none; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
                     <button class="type-btn active" onclick="changeScheduleType('academic')">Academic</button>
                     <button class="type-btn" onclick="changeScheduleType('mid1')">Mid-1 Exam</button>
                     <button class="type-btn" onclick="changeScheduleType('mid2')">Mid-2 Exam</button>
@@ -176,13 +202,15 @@
                 <!-- Single Shared Display Area -->
                 <div id="scheduleDisplay" class="schedule-display-area">
                     <div style="text-align:center; padding: 50px; color: #999;">
-                        <i class="fa-solid fa-calendar-days" style="font-size:3rem; margin-bottom:15px; opacity:0.3;"></i>
+                        <i class="fa-solid fa-calendar-days"
+                            style="font-size:3rem; margin-bottom:15px; opacity:0.3;"></i>
                         <p>Select a Semester to view details</p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="back-btn" id="backFromTimetable"><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
+                <button class="back-btn" id="backFromTimetable"><i class="fa-solid fa-arrow-left"></i> Back to
+                    Home</button>
             </div>
         </div>
     </div>
@@ -190,17 +218,21 @@
     <!-- 🟢 Dedicated WhatsApp Groups Modal -->
     <div id="whatsappModal" class="modal">
         <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header" style="background: linear-gradient(135deg, #25D366, #128C7E); color:white; position: relative;">
+            <div class="modal-header"
+                style="background: linear-gradient(135deg, #25D366, #128C7E); color:white; position: relative;">
                 <h2 style="display: flex; align-items: center; gap: 10px;">
                     <i class="fa-brands fa-whatsapp"></i> Official WhatsApp Groups
                 </h2>
-                <span class="close" id="closeWhatsappModal" style="font-size: 3rem; position: absolute; right: 20px; top: 10px; cursor: pointer;">&times;</span>
+                <span class="close" id="closeWhatsappModal"
+                    style="font-size: 3rem; position: absolute; right: 20px; top: 10px; cursor: pointer;">&times;</span>
             </div>
             <div class="modal-body" style="padding: 30px;">
-                <p style="color: #666; margin-bottom: 25px; text-align: center; font-weight: 600; font-size: 1.1rem;">College Groups</p>
+                <p style="color: #666; margin-bottom: 25px; text-align: center; font-weight: 600; font-size: 1.1rem;">
+                    College Groups</p>
                 <div id="whatsappContainer" style="display: grid; gap: 15px;">
                     <!-- Dynamically loaded -->
-                    <div style="text-align:center; padding:20px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Loading links...</div>
+                    <div style="text-align:center; padding:20px; color:#aaa;"><i
+                            class="fa-solid fa-spinner fa-spin"></i> Loading links...</div>
                 </div>
             </div>
         </div>
@@ -209,8 +241,10 @@
     <!-- 🟢 Dedicated Mentors Modal -->
     <div id="mentorsModal" class="modal">
         <div class="modal-content" style="max-width: 800px;">
-            <span class="close-modal" id="closeMentorsModal" style="font-size: 2.5rem; top: 10px; right: 20px;">&times;</span>
-            <div class="modal-header" style="background: #2c3e50; color: white; padding: 20px; border-radius: 12px 12px 0 0;">
+            <span class="close-modal" id="closeMentorsModal"
+                style="font-size: 2.5rem; top: 10px; right: 20px;">&times;</span>
+            <div class="modal-header"
+                style="background: #2c3e50; color: white; padding: 20px; border-radius: 12px 12px 0 0;">
                 <h2 style="margin:0;"><i class="fa-solid fa-people-group"></i> Faculty Mentors List</h2>
             </div>
             <div class="modal-body" style="padding: 20px;">
@@ -219,7 +253,7 @@
                     <button class="year-tab" onclick="switchMentorYear('2nd_year')">II YEAR</button>
                     <button class="year-tab" onclick="switchMentorYear('3rd_year')">III YEAR</button>
                 </div>
-                
+
                 <div class="mentor-table-wrapper" style="max-height: 500px; overflow-y: auto; border-radius: 8px;">
                     <div id="mentorsTableBody" class="mentors-grid">
                         <!-- Dynamically loaded cards -->
@@ -232,16 +266,20 @@
     <!-- 🟢 Dedicated Committees Modal -->
     <div id="committeesModal" class="modal">
         <div class="modal-content" style="max-width: 900px;">
-            <span class="close-modal" id="closeCommitteesModal" style="font-size: 2.5rem; top: 10px; right: 20px;">&times;</span>
-            <div class="modal-header" style="background: var(--primary); color: white; padding: 20px; border-radius: 12px 12px 0 0;">
+            <span class="close-modal" id="closeCommitteesModal"
+                style="font-size: 2.5rem; top: 10px; right: 20px;">&times;</span>
+            <div class="modal-header"
+                style="background: var(--primary); color: white; padding: 20px; border-radius: 12px 12px 0 0;">
                 <h2 style="margin:0;"><i class="fa-solid fa-users-gear"></i> Formation of Committees (2025-26)</h2>
             </div>
             <div class="modal-body" style="padding: 25px;">
-                <div id="committeesTabContainer" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 25px; border-bottom: 1px solid #eee;">
+                <div id="committeesTabContainer"
+                    style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 25px; border-bottom: 1px solid #eee;">
                     <!-- Committee name tabs loaded here -->
                 </div>
-                
-                <div class="mentor-table-wrapper" style="max-height: 500px; overflow-y: auto; border-radius: 12px; border: 1px solid #edf2f7; background: #f8fafc; padding: 15px;">
+
+                <div class="mentor-table-wrapper"
+                    style="max-height: 500px; overflow-y: auto; border-radius: 12px; border: 1px solid #edf2f7; background: #f8fafc; padding: 15px;">
                     <div id="committeesContent" class="mentors-grid">
                         <!-- Committee members cards loaded here -->
                         <div style="text-align:center; width:100%; padding:40px; color:#94a3b8;">
@@ -255,4 +293,5 @@
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>

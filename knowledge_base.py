@@ -53,7 +53,7 @@ KEYWORD_MAP = {
     "magazine": "📰 College Magazine is published **once per academic year** to develop creative talents.",
 
     # ── PRINCIPAL ──────────────────────────────────────────────────────────
-    "principal": "👨‍🏫 **Principal**: Prof. N. Venugopal Reddy\n📋 Qualifications: M.Sc(Physics), M.Phil., Ph.D., M.Sc.(Maths)\n📞 Contact: **9000489182**",
+    "founder principal": "👔 **Founder Principal**: Sri K. Rami Reddy, M.A., M.Sc., L.T. (1945-1950).",
     "venugopal reddy": "👨‍🏫 **Prof. N. Venugopal Reddy** is the current Principal. Qualifications: M.Sc(Physics), M.Phil., Ph.D., M.Sc.(Maths). 📞 9000489182",
     "principal contact": "📞 Principal's contact: **9000489182** (Prof. N. Venugopal Reddy)",
     "principal phone": "📞 Principal Prof. N. Venugopal Reddy: **9000489182**",
@@ -112,7 +112,7 @@ KEYWORD_MAP = {
     "hindi": "🗣️ **Hindi Dept**: Smt. T. Thriveni – Assoc. Prof. & Head. 📞 6300586591",
     "hindi hod": "🗣️ **HoD Hindi**: Smt. T. Thriveni — 📞 6300586591",
 
-    "history": "🏺 **History Dept**:\n1. Prof. G. Kishan – Prof. & Head (📞 8919672096)\n2. T. Jayaramaiah – Sr. Lecturer (📞 9703078308)\n3. E. Madhusudan Rao – Lecturer (📞 9441776545)",
+    "history dept": "🏺 **History Dept**:\n1. Prof. G. Kishan – Prof. & Head (📞 8919672096)\n2. T. Jayaramaiah – Sr. Lecturer (📞 9703078308)\n3. E. Madhusudan Rao – Lecturer (📞 9441776545)",
     "history hod": "🏺 **HoD History**: Prof. G. Kishan — 📞 8919672096",
     "kishan": "🏺 **Prof. G. Kishan** – HoD History. 📞 8919672096. Calendar Committee Editor, Career Guidance Cell, SC/ST Committee Coordinator, IIC Member.",
 
@@ -294,10 +294,8 @@ KEYWORD_MAP = {
     "sports day": "🏅 **Sports Day Committee**: Prof. Y. Dasaradhudu (📞 9440054764), Dr. S. Mustaq Ahmed (📞 8985136140).",
     "website committee": "🌐 **Website Committee**: Coordinator – Sri C. Ratna Rao (📞 8790835429).",
     "timetable committee": "📅 **Timetable Committee**: Coordinator – Prof. Y. Mallikarjun Rao (📞 9848533623).",
-    "how many committees": "🏢 There are **52 officially constituted committees** in S.V. Arts College for the academic year 2025-26. You can ask for the 'list of committees' to see them all, or ask about a specific one.",
-    "list committees": "📋 The college has 52 committees including: Planning & Evaluation, Academic Cell, Anti-Ragging, Anti-Drug, Discipline, IQAC, Examination Cell, Women Empowerment, and many more. Which one would you like to know about?",
-    "list of committees": "📋 The college has 52 committees including: Planning & Evaluation, Academic Cell, Anti-Ragging, Anti-Drug, Discipline, IQAC, Examination Cell, Women Empowerment, and many more. Which one would you like to know about?",
-    "committee list": "📋 S.V. Arts College has 52 committees. You can ask about any specific committee like 'Anti-Ragging committee members' or 'Discipline committee' to get details.",
+    "website committee": "🌐 **Website Committee**: Coordinator – Sri C. Ratna Rao (📞 8790835429).",
+    "timetable committee": "📅 **Timetable Committee**: Coordinator – Prof. Y. Mallikarjun Rao (📞 9848533623).",
 
     # ── IGNOU / OPEN UNIVERSITY ───────────────────────────────────────────────
     "ignou": "🎓 **IGNOU Centre Coordinator**: Prof. P. Bhaskarudu (HoD Mathematics) — 📞 9490108326",
@@ -344,9 +342,8 @@ KEYWORD_MAP = {
     "tirumala numbers": "📞 **Tirumala Numbers**: TTD PBX 0877-2277777, JEO: 2263766, Arjitha Seva: 2263277, Srivari Seva: 2263679",
 
     # ── MENTOR SYSTEM ─────────────────────────────────────────────────────────
-    "mentor": "👥 **Mentor System**: Each class is assigned a mentor who supervises academic progress and acts as a local guardian. Mentors list is available for all 3 years.",
+    "mentor": "👥 **Mentor System**: Each class is assigned a mentor who supervises academic progress and acts as a local guardian.",
     "mentors": "👥 **Mentors (2025-26)**: Available for all Years 1, 2, and 3 across all departments. Each class has a dedicated mentor.",
-    "mentor year 1": "👥 **Year 1 Mentors** (sample):\n- History: Sri E. Madhusudhana Rao (📞 9441776545)\n- CS-1 & CS-2: Sri K.N.V.V.S.S. Chakravarthy (📞 9505123979)\n- Physics: Dr. Y. Dasaradhudu\n- Maths: Capt. V. Ramesh (📞 9492855008)",
 
     # ── NATIONAL / INTERNATIONAL DAYS ────────────────────────────────────────
     "teachers day": "🎉 **Teachers Day**: September 5 — celebrated at S.V. Arts College.",
@@ -367,17 +364,153 @@ KEYWORD_MAP = {
 }
 
 
+def get_json_data():
+    """Helper function to load the primary institutional data with multiple path fallbacks."""
+    # Try multiple common locations for the JSON files
+    search_paths = [
+        os.path.join(os.path.dirname(__file__), 'college_data.json'),
+        os.path.join(os.path.dirname(__file__), 'sv_arts_college_COMPLETE.json'),
+        os.path.join(os.getcwd(), 'college_data.json'),
+        os.path.join(os.getcwd(), 'sv_arts_college_COMPLETE.json'),
+        'college_data.json',
+        'sv_arts_college_COMPLETE.json'
+    ]
+    
+    for p in search_paths:
+        if os.path.exists(p):
+            try:
+                with open(p, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except: continue
+    return None
+
+def handle_special_queries(msg: str) -> str | None:
+    """Handles structured queries that require aggregating full lists from JSON."""
+    
+    # 1. SPECIAL CASE: "How many committees" (Catch even if JSON fails)
+    if any(k in msg for k in ["how many committees", "total committees", "how many commities", "how many ocmmities", "committees"]):
+        data = get_json_data()
+        count = "52"
+        if data:
+            count = str(len(data.get('committees_2025_2026', [])) or "52")
+        
+        # If they just asked "committees", give them the list instead of just the count
+        if msg.strip() == "committees":
+            return handle_special_queries("all committees")
+            
+        return f"🏢 There are **{count} officially constituted committees** in S.V. Arts College for the academic year 2025-2026."
+
+    data = get_json_data()
+    if not data: return None
+
+    # 1.5 PRINCIPAL BY YEAR OR ORDINAL
+    if "principal" in msg or "principle" in msg:
+        import re
+        
+        # Check for numeric ordinals (first, second, etc.)
+        ordinals = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"]
+        for i, ord_word in enumerate(ordinals):
+            if ord_word in msg:
+                successive = data.get('successive_principals', [])
+                if len(successive) > i:
+                    p = successive[i]
+                    return f"👔 **{ord_word.capitalize()} Principal**: {p['name']} ({p.get('qualifications', '')})\nPeriod: {p.get('period', '')}"
+
+        # Check for year
+        years = re.findall(r'\d{4}', msg)
+        if years:
+            year_int = int(years[0])
+            successive = data.get('successive_principals', [])
+            for p in successive:
+                period = p.get('period', '')
+                if str(year_int) in period:
+                    return f"👔 **Principal in {year_int}**: {p['name']} ({p.get('qualifications', '')})\nPeriod: {period}"
+            return f"👔 I couldn't find the specific principal for the year {year_int}. However, you can ask for the 'list of successive principals' to see the full history."
+
+    # 2. HODs
+    if any(k in msg for k in ["all hod", "hod names", "head of department names", "list of hods"]):
+        res = "👨‍🏫 **List of Heads of Departments (HoDs):**\n"
+        depts = data.get('faculty_members', {}).get('departments', {})
+        for dept, info in depts.items():
+            faculty = info if isinstance(info, list) else info.get('faculty', [])
+            for m in faculty:
+                d = m.get('designation', '').lower()
+                if "head" in d or "hod" in d:
+                    res += f"• {dept.replace('_',' ')}: **{m['name']}** (📞 {m.get('phone','N/A')})\n"
+        return res
+
+    # 3. COMMITTEES LIST
+    if any(k in msg for k in ["all committees", "list of committees", "what are the committees", "names of committees", "all commities", "list of commities"]):
+        coms = data.get('committees_2025_2026', [])
+        if not coms: return None
+        res = f"🏢 **S.V. Arts College Committees (Total {len(coms)}):**\n"
+        for c in coms:
+            coord = "N/A"
+            if 'coordinator' in c:
+                coord = c['coordinator'].get('name', 'N/A') if isinstance(c['coordinator'], dict) else c['coordinator']
+            else:
+                for m in c.get('members', []):
+                    if m.get('role', '').lower() in ['coordinator', 'co-ordinator']:
+                        coord = m.get('name', 'N/A')
+                        break
+            res += f"{c.get('no', '')}. {c['name']} (Coord: **{coord}**)\n"
+        res += "\n💡 *Ask 'Who is in [Committee Name]?' for a full list of members for any specific committee.*"
+        return res
+
+    if "who are in" in msg or "who is in" in msg or "members of" in msg:
+        coms = data.get('committees_2025_2026', [])
+        for c in coms:
+            if c['name'].lower() in msg:
+                res = f"👥 **Members of {c['name']}:**\n"
+                for m in c.get('members', []):
+                    res += f"• {m['name']} ({m.get('role', 'Member')}) | {m.get('designation', m.get('desig', ''))}\n"
+                return res
+        if "committ" in msg or "commiti" in msg or "commitee" in msg:
+            return "📋 Please specify which committee you'd like to know about (e.g., 'Who is in the Anti-Ragging committee?'). You can ask for the 'list of committees' to see them all."
+
+    # 4. MENTORS
+    if any(k in msg for k in ["all mentors", "mentor names", "list of mentors"]):
+        res = "👥 **College Mentors (2025-26):**\n"
+        mentors = data.get('mentors_list_2025_2026', {})
+        for year, list_item in mentors.items():
+            res += f"\n**[{year.upper()}]**\n"
+            for m in list_item:
+                res += f"• {m['class']}: **{m['mentor']}** (📞 {m.get('phone','N/A')})\n"
+        return res
+
+    # 5. PRINCIPLES / MISSION
+    if any(k in msg for k in ["all principles", "college principles", "vision and mission", "pledge", "motto", "vision", "mission"]):
+        # Special check to avoid mission collision if they just want historical principle
+        if "19" in msg or "20" in msg: pass # Let year logic handle it
+        else:
+            v_m = data.get('vision_and_mission', {})
+            pledge = data.get('college_pledge', '')
+            motto = data.get('document_info', {}).get('motto', 'Om Namo Venkatesaya')
+            res = f"✨ **S.V. Arts College Principles:**\n\n"
+            res += f"🕉️ **Motto:** {motto}\n\n"
+            res += f"🎯 **Vision:**\n• " + "\n• ".join(v_m.get('vision', [])) + "\n\n"
+            res += f"🚀 **Mission:**\n• " + "\n• ".join(v_m.get('mission', [])) + "\n\n"
+            if pledge: res += f"📜 **Pledge:** {pledge}\n"
+            return res
+
+    return None
+
 def match_keywords(user_message: str) -> str | None:
     """
-    Returns a pre-defined answer if any keyword matches, else None.
-    Checks longer phrases first for better accuracy.
+    Checks for high-priority structured queries first, then falls back to keyword mapping.
     """
     msg = user_message.lower().strip()
-    # Sort by length descending so multi-word phrases are checked first
+    
+    # Priority 1: High-level list/structured queries
+    special = handle_special_queries(msg)
+    if special: return special
+
+    # Priority 2: Keyword mapping
     sorted_keys = sorted(KEYWORD_MAP.keys(), key=len, reverse=True)
     for key in sorted_keys:
         if key in msg:
             return KEYWORD_MAP[key]
+            
     return None
 
 
