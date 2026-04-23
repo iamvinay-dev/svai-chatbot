@@ -26,19 +26,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
     const menuToggle = document.getElementById('menuToggle');
     const closeSidebar = document.getElementById('closeSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.add('active');
-        });
-    }
+    const openMenu = () => {
+        sidebar.classList.add('active');
+        if (sidebarOverlay) sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+    };
 
     const closeMenu = () => {
         sidebar.classList.remove('active');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
     };
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', openMenu);
+    }
 
     if (closeSidebar) {
         closeSidebar.addEventListener('click', closeMenu);
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeMenu);
     }
     const chatContainer = document.getElementById('chatContainer');
     const userInput = document.getElementById('userInput');
@@ -288,7 +299,14 @@ document.addEventListener('DOMContentLoaded', () => {
         displayArea.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
 
         try {
-            const hRes = await fetch(`/static/timetable/${baseName}.html`);
+            // First try specific: sem1_academic.html
+            let hRes = await fetch(`/static/timetable/${baseName}.html`);
+            
+            // If that fails, try simple: sem1.html (for legacy support)
+            if (!hRes.ok && type === 'academic') {
+                hRes = await fetch(`/static/timetable/sem${sem}.html`);
+            }
+
             if (hRes.ok) {
                 displayArea.innerHTML = await hRes.text();
                 return;
@@ -367,6 +385,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target == mentorsModal) mentorsModal.style.display = 'none';
         if (e.target == committeesModal) committeesModal.style.display = 'none';
     });
+
+    // Hide Preloader
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        setTimeout(() => {
+            preloader.style.opacity = '0';
+            setTimeout(() => preloader.style.display = 'none', 500);
+        }, 800); // Give it a moment for a premium feel
+    }
 });
 
 let committeesDataStore = {};

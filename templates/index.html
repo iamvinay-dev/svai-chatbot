@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1a237e">
     <title>SVAI Bot | Sri Venkateswara Arts College (TTD)</title>
 
     <!-- Google tag (gtag.js) -->
@@ -49,7 +50,15 @@
 </head>
 
 <body>
+    <!-- Preloader -->
+    <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s;">
+        <div style="width: 80px; height: 80px; border: 5px solid #f3f3f3; border-top: 5px solid #1a237e; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <p style="margin-top: 20px; font-family: 'Outfit', sans-serif; color: #1a237e; font-weight: 600; font-size: 1.2rem;">SVAI Bot Initializing...</p>
+        <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+    </div>
+
     <div class="app-container">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
         <!-- Sidebar / Navigation -->
         <aside class="sidebar" id="sidebar">
             <div class="close-sidebar" id="closeSidebar">
@@ -146,18 +155,20 @@
                 <h3>Programmes Offered</h3>
             </div>
             <div class="courses-list">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Programme Name</th>
-                            <th>Seats</th>
-                            <th>Fee (Rs.)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="coursesTableBody">
-                        <!-- Courses will be populated here -->
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Programme Name</th>
+                                <th style="text-align: center;">Seats</th>
+                                <th style="text-align: right;">Fee (Rs.)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="coursesTableBody">
+                            <!-- Courses will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
